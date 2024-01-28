@@ -1,6 +1,6 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 
-export async function splitDocument(text) {
+export async function splitDocuments(text) {
   try {
     const splitter = new RecursiveCharacterTextSplitter({
       chunkSize: 150,

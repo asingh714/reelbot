@@ -5,8 +5,10 @@ import cors from "cors";
 import morgan from "morgan";
 import axios from "axios";
 import OpenAI from "openai";
+import { createClient } from "@supabase/supabase-js";
 
 import { movieGenre } from "./utils/movieGenre.js";
+import { splitDocuments } from "./utils/splitDocuments.js";
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
@@ -18,6 +20,11 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_API_KEY
+);
+
 app.get("/getMovies", async (req, res) => {
   try {
     const response = await axios.get(
@@ -28,7 +35,7 @@ app.get("/getMovies", async (req, res) => {
           include_video: true,
           language: "en-US",
           sort_by: "popularity.desc",
-          page: 2,
+          page: 1,
         },
         headers: {
           Accept: "application/json",
@@ -53,7 +60,26 @@ app.get("/getMovies", async (req, res) => {
       };
     });
 
-    res.status(200).json(info);
+    const output = await splitDocuments(JSON.stringify(info));
+    const data = await Promise.all(
+      output.map(async (item) => {
+        const embeddingResponse = await openai.embeddings.create({
+          model: "text-embedding-ada-002",
+          input: item.pageContent,
+        });
+
+        return {
+          content: item.pageContent,
+          embedding: embeddingResponse.data[0].embedding,
+        };
+      })
+    );
+
+    const { error } = await supabase.from("movie").insert(data);
+    if (error) {
+      throw new Error("Error inserting data into movies table");
+    }
+    res.status(200).json({ msg: "Embedding and storing complete!" });
   } catch (error) {
     console.error("Error fetching movie data:", error);
     res.status(500).send("Error while fetching movie data");
@@ -66,8 +92,8 @@ What to do:
 1. Get movie data from TMDB API - which is a list. 
 2. For each movie, combine the details into a single string.
 3. split documents function 
-
-insert into supabase
+4. store in supabase
+5. ask openai to embed the string
 
 id: automatic 
 
