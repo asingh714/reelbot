@@ -13,6 +13,11 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(morgan("tiny"));
 app.use(express.json());
 
+// OPEN AI CONFIG
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 app.get("/getMovies", async (req, res) => {
   try {
     const response = await axios.get(
@@ -35,13 +40,13 @@ app.get("/getMovies", async (req, res) => {
 
     const info = movies.map((movie) => {
       let content = "";
-      content += `Title: ${movie.title}.`;
-      content += `Movie Overview: ${movie.overview}.`;
-      content += `Release Date: ${movie.release_date}.`;
-      content += `Rating: ${movie.vote_average}.`;
-      content += `Popularity: ${movie.popularity}.`;
-      content += `Movie is for adults: ${movie.adult}.`;
-      content += `Genres: ${movie.genre_ids.map((id) => movieGenre[id])}.`;
+      content += `Title: ${movie.title}. `;
+      content += `Movie Overview: ${movie.overview}. `;
+      content += `Release Date: ${movie.release_date}. `;
+      content += `Rating: ${movie.vote_average}. `;
+      content += `Popularity: ${movie.popularity}. `;
+      content += `Movie is for adults: ${movie.adult}. `;
+      content += `Genres: ${movie.genre_ids.map((id) => movieGenre[id])}. `;
       return {
         content: content,
         movie_id: movie.id,
@@ -60,7 +65,9 @@ What to do:
 
 1. Get movie data from TMDB API - which is a list. 
 2. For each movie, combine the details into a single string.
+3. split documents function 
 
+insert into supabase
 
 id: automatic 
 
