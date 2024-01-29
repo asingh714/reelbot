@@ -7,13 +7,14 @@ import axios from "axios";
 import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
 
-import { movieGenre } from "./utils/movieGenre.js";
-import { splitDocuments } from "./utils/splitDocuments.js";
-
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(morgan("tiny"));
 app.use(express.json());
+
+import { movieGenre } from "./utils/movieGenre.js";
+import { createEmbedding } from "./utils/createEmbeddings.js";
+import { findNearestMovie } from "./utils/findNearestMovie.js";
 
 // OPEN AI CONFIG
 const openai = new OpenAI({
@@ -25,7 +26,7 @@ const supabase = createClient(
   process.env.SUPABASE_API_KEY
 );
 
-app.get("/getMovies", async (req, res) => {
+app.post("/getMovies", async (req, res) => {
   try {
     const response = await axios.get(
       "https://api.themoviedb.org/3/discover/movie",
@@ -35,7 +36,7 @@ app.get("/getMovies", async (req, res) => {
           include_video: true,
           language: "en-US",
           sort_by: "popularity.desc",
-          page: 1,
+          page: 5,
         },
         headers: {
           Accept: "application/json",
@@ -47,68 +48,41 @@ app.get("/getMovies", async (req, res) => {
 
     const info = movies.map((movie) => {
       let content = "";
-      content += `Title: ${movie.title}. `;
-      content += `Movie Overview: ${movie.overview}. `;
-      content += `Release Date: ${movie.release_date}. `;
-      content += `Rating: ${movie.vote_average}. `;
-      content += `Popularity: ${movie.popularity}. `;
-      content += `Movie is for adults: ${movie.adult}. `;
-      content += `Genres: ${movie.genre_ids.map((id) => movieGenre[id])}. `;
-      return {
-        content: content,
-        movie_id: movie.id,
-      };
+      content += `Movie Title: ${movie.title}. Movie ID: ${movie.id}. ${
+        movie.title
+      } Overview: ${movie.overview}. Release Date: ${
+        movie.release_date
+      }. Rating: ${movie.vote_average}. Popularity: ${
+        movie.popularity
+      }. Movie is for adults: ${movie.adult}. Genres: ${movie.genre_ids.map(
+        (id) => movieGenre[id]
+      )}.`;
+      content += "\n";
+      content += "\n";
+      return content;
     });
 
-    const output = await splitDocuments(JSON.stringify(info));
-    const data = await Promise.all(
-      output.map(async (item) => {
-        const embeddingResponse = await openai.embeddings.create({
-          model: "text-embedding-ada-002",
-          input: item.pageContent,
-        });
+    const embedding = await openai.embeddings.create({
+      model: "text-embedding-ada-002",
+      input: info,
+    });
 
-        return {
-          content: item.pageContent,
-          embedding: embeddingResponse.data[0].embedding,
-        };
-      })
-    );
+    const data = [];
+    embedding.data.forEach((item, index) => {
+      const obj = {};
+      obj["content"] = info[index];
+      obj["embedding"] = item.embedding;
+      obj["movie_id"] = movies[index].id;
+      data.push(obj);
+    });
 
-    const { error } = await supabase.from("movie").insert(data);
-    if (error) {
-      throw new Error("Error inserting data into movies table");
-    }
-    res.status(200).json({ msg: "Embedding and storing complete!" });
+    await supabase.from("movie").insert(data);
+    res.status(200).json({ msg: "done" });
   } catch (error) {
     console.error("Error fetching movie data:", error);
     res.status(500).send("Error while fetching movie data");
   }
 });
-
-/*
-What to do: 
-
-1. Get movie data from TMDB API - which is a list. 
-2. For each movie, combine the details into a single string.
-3. split documents function 
-4. store in supabase
-5. ask openai to embed the string
-
-id: automatic 
-
-title 
-overview
-release_date 
-vote_average 
-popularity
-adult: false
-genres: [] --> figure out how to get types 
-
-embedding 
-
-movie_id: 466420 
-*/
 
 /* 
 {
@@ -134,6 +108,39 @@ movie_id: 466420
 
 
 */
+
+const chatMessage = [
+  {
+    role: "system",
+    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about movies and a question. Your main job is to formulate a short answer to the question using the provided context. If the answer is not given in the context, find the answer in the conversation history if possible. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. `,
+  },
+];
+
+app.post("/movieRec", async (req, res) => {
+  const { input } = req.body;
+  try {
+    const embedding = await createEmbedding(input);
+    const match = await findNearestMovie(embedding);
+
+    chatMessage.push({
+      role: "user",
+      content: `Context: ${match} Question: ${input}`,
+    });
+
+    const { choices } = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: chatMessage,
+      temperature: 0.5,
+      frequency_penalty: 0.5,
+    });
+
+    chatMessage.push(choices[0].message);
+
+    res.status(200).json({ answer: choices[0].message.content });
+  } catch (error) {
+    res.status(500).send("Error with search");
+  }
+});
 
 const port = process.env.PORT || 5000;
 
