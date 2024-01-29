@@ -120,11 +120,11 @@ app.post("/movieRec", async (req, res) => {
   const { input } = req.body;
   try {
     const embedding = await createEmbedding(input);
-    const match = await findNearestMovie(embedding);
+    const { match, id } = await findNearestMovie(embedding);
 
     chatMessage.push({
       role: "user",
-      content: `Context: ${match} Question: ${input}`,
+      content: `Context: ${match} Question: ${input} Movie id: ${id}`,
     });
 
     const { choices } = await openai.chat.completions.create({
@@ -136,7 +136,7 @@ app.post("/movieRec", async (req, res) => {
 
     chatMessage.push(choices[0].message);
 
-    res.status(200).json({ answer: choices[0].message.content });
+    res.status(200).json({ answer: choices[0].message.content, id });
   } catch (error) {
     res.status(500).send("Error with search");
   }
