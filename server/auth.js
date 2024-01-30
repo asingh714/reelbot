@@ -66,3 +66,52 @@ export const register = async (req, res) => {
     res.status(500).json({ msg: error.message });
   }
 };
+
+export const login = async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({
+      msg: "Please provide email and password to login",
+    });
+  }
+
+  try {
+    const { data: users, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("username", username)
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!users) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, users.password);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ msg: "Invalid credentials" });
+    }
+
+    const tokenUser = createTokenUser(users);
+    attachCookiesToResponse({ res, user: tokenUser });
+
+    res.status(200).json({ username: users.username, email: users.email });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const logout = async (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000),
+  });
+
+  res.status(200).json({ msg: "User logged out" });
+};

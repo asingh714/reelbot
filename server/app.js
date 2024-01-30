@@ -17,7 +17,8 @@ app.use(cookieParser(process.env.JWT_SECRET));
 import { movieGenre } from "./utils/movieGenre.js";
 import { createEmbedding } from "./utils/createEmbeddings.js";
 import { findNearestMovie } from "./utils/findNearestMovie.js";
-import { register } from "./auth.js";
+import { login, register, logout } from "./auth.js";
+import { authenticate } from "./utils/authenticate.js";
 
 // OPEN AI CONFIG
 const openai = new OpenAI({
@@ -30,6 +31,8 @@ const supabase = createClient(
 );
 
 app.post("/register", register);
+app.post("/login", login);
+app.post("/logout", logout);
 
 app.post("/postMovies", async (req, res) => {
   try {
@@ -147,7 +150,7 @@ const chatMessage = [
   },
 ];
 
-app.post("/movieRec", async (req, res) => {
+app.post("/movieRec", authenticate, async (req, res) => {
   const { input } = req.body;
   try {
     const embedding = await createEmbedding(input);
