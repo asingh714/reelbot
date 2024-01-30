@@ -36,9 +36,9 @@ app.post("/logout", logout);
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
-    let page = 66;
+    let page = 81;
     let movies = [];
-    let totalPages = 80;
+    let totalPages = 95;
 
     while (page <= totalPages) {
       const response = await axios.get(
@@ -103,7 +103,7 @@ app.post("/postMovies", async (req, res) => {
 const chatMessage = [
   {
     role: "system",
-    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about movies and a question. Your main job is to formulate a short answer to the question using the provided context. If the answer is not given in the context, find the answer in the conversation history if possible. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. `,
+    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about movies and a question. Your main job is to formulate an informative answer to the question using the provided context. If the answer is not given in the context, find the answer in the conversation history if possible. Feel free to include any relevant additional information you might be aware of. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. `,
   },
 ];
 

@@ -1,15 +1,46 @@
-import "./App.css";
-import Logo from "./assets/logo.svg";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import Home from "./Pages/Home/Home";
+import Login from "./Pages/Login/Login";
+import SignUp from "./Pages/SignUp/SignUp";
+import NotFound from "./Pages/NotFound/NotFound";
+import "./styles/global.scss";
 
 function App() {
-  return (
-    <>
-      <nav>
-        <h1>ReelBot</h1>
-        <img src={Logo} alt="" />
-      </nav>
-    </>
-  );
+  const Layout = () => {
+    return (
+      <div className="main">
+        <Outlet />
+      </div>
+    );
+  };
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+      ],
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
 }
 
 export default App;
