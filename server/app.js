@@ -20,7 +20,6 @@ import { findNearestMovie } from "./utils/findNearestMovie.js";
 import { login, register, logout } from "./auth.js";
 import { authenticate } from "./utils/authenticate.js";
 
-// OPEN AI CONFIG
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -40,22 +39,7 @@ app.post("/postMovies", async (req, res) => {
     let page = 66;
     let movies = [];
     let totalPages = 80;
-    // const response = await axios.get(
-    //   "https://api.themoviedb.org/3/discover/movie",
-    //   {
-    //     params: {
-    //       include_adult: true,
-    //       include_video: true,
-    //       language: "en-US",
-    //       sort_by: "popularity.desc",
-    //       page: 5,
-    //     },
-    //     headers: {
-    //       Accept: "application/json",
-    //       Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_TOKEN}`,
-    //     },
-    //   }
-    // );
+
     while (page <= totalPages) {
       const response = await axios.get(
         "https://api.themoviedb.org/3/discover/movie",
@@ -77,8 +61,6 @@ app.post("/postMovies", async (req, res) => {
       movies = [...movies, ...response.data.results];
       page++;
     }
-
-    // const movies = response.data.results;
 
     const info = movies.map((movie) => {
       let content = "";
@@ -117,31 +99,6 @@ app.post("/postMovies", async (req, res) => {
     res.status(500).send("Error while fetching movie data");
   }
 });
-
-/* 
-{
-    "adult": false,
-    "backdrop_path": "/1X7vow16X7CnCoexXh4H4F2yDJv.jpg",
-    "genre_ids": [
-        80,
-        36,
-        18
-    ],
-    "id": 466420,
-    "original_language": "en",
-    "original_title": "Killers of the Flower Moon",
-    "overview": "When oil is discovered in 1920s Oklahoma under Osage Nation land, the Osage people are murdered one by one—until the FBI steps in to unravel the mystery.",
-    "popularity": 428.415,
-    "poster_path": "/dB6Krk806zeqd0YNp2ngQ9zXteH.jpg",
-    "release_date": "2023-10-18",
-    "title": "Killers of the Flower Moon",
-    "video": false,
-    "vote_average": 7.5,
-    "vote_count": 2080
-},
-
-
-*/
 
 const chatMessage = [
   {
