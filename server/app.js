@@ -5,16 +5,19 @@ import cors from "cors";
 import morgan from "morgan";
 import axios from "axios";
 import OpenAI from "openai";
+import cookieParser from "cookie-parser";
 import { createClient } from "@supabase/supabase-js";
 
 const app = express();
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 import { movieGenre } from "./utils/movieGenre.js";
 import { createEmbedding } from "./utils/createEmbeddings.js";
 import { findNearestMovie } from "./utils/findNearestMovie.js";
+import { register } from "./auth.js";
 
 // OPEN AI CONFIG
 const openai = new OpenAI({
@@ -26,25 +29,53 @@ const supabase = createClient(
   process.env.SUPABASE_API_KEY
 );
 
-app.post("/getMovies", async (req, res) => {
+app.post("/register", register);
+
+app.post("/postMovies", async (req, res) => {
   try {
-    const response = await axios.get(
-      "https://api.themoviedb.org/3/discover/movie",
-      {
-        params: {
-          include_adult: true,
-          include_video: true,
-          language: "en-US",
-          sort_by: "popularity.desc",
-          page: 5,
-        },
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_TOKEN}`,
-        },
-      }
-    );
-    const movies = response.data.results;
+    // NEED TO DO.
+    let page = 66;
+    let movies = [];
+    let totalPages = 80;
+    // const response = await axios.get(
+    //   "https://api.themoviedb.org/3/discover/movie",
+    //   {
+    //     params: {
+    //       include_adult: true,
+    //       include_video: true,
+    //       language: "en-US",
+    //       sort_by: "popularity.desc",
+    //       page: 5,
+    //     },
+    //     headers: {
+    //       Accept: "application/json",
+    //       Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_TOKEN}`,
+    //     },
+    //   }
+    // );
+    while (page <= totalPages) {
+      const response = await axios.get(
+        "https://api.themoviedb.org/3/discover/movie",
+        {
+          params: {
+            include_adult: true,
+            include_video: true,
+            language: "en-US",
+            sort_by: "popularity.desc",
+            page: page,
+          },
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${process.env.TMDB_READ_ACCESS_TOKEN}`,
+          },
+        }
+      );
+
+      movies = [...movies, ...response.data.results];
+      page++;
+    }
+
+    // const movies = response.data.results;
 
     const info = movies.map((movie) => {
       let content = "";
