@@ -1,0 +1,81 @@
+@import "../../styles/variables.scss";
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  padding: 5rem;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $zinc-400;
+    margin-bottom: 0.5rem;
+  }
+
+  input {
+    font-size: 1.2rem;
+    font-weight: 600;
+    max-width: 35rem;
+    margin-bottom: 1.6rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid $gray-300;
+    border-radius: 5px;
+    color: $zinc-400;
+    &:focus {
+      outline: none;
+      border: 1px solid $PURPLE;
+    }
+
+    &::placeholder {
+      color: $gray-400;
+    }
+  }
+
+  button {
+    background-color: $LIGHT-PURPLE;
+    border: none;
+    color: white;
+    padding: 0.5rem 0rem;
+    border-radius: 1.5rem;
+    margin-top: 2.5rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+
+  .error {
+    border: 1px solid $red-300;
+    background-color: $red-50;
+  }
+
+  .error-login-text {
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: $red-600;
+    background-color: $red-200;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    max-width: 35rem;
+
+    img {
+      height: 1.5rem;
+      width: 1.5rem;
+      margin-right: 5px;
+    }
+  }
+
+  .signup-link {
+    margin-top: 5rem;
+
+    #darker {
+      color: gray;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+  }
+}

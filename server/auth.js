@@ -100,7 +100,9 @@ export const login = async (req, res) => {
     const tokenUser = createTokenUser(users);
     attachCookiesToResponse({ res, user: tokenUser });
 
-    res.status(200).json({ username: users.username, email: users.email });
+    res
+      .status(200)
+      .json({ username: users.username, email: users.email, user: tokenUser });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: error.message });

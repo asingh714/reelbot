@@ -36,9 +36,9 @@ app.post("/logout", logout);
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
-    let page = 81;
+    let page = 116;
     let movies = [];
-    let totalPages = 95;
+    let totalPages = 130;
 
     while (page <= totalPages) {
       const response = await axios.get(
