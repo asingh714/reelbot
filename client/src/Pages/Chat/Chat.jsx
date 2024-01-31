@@ -1,13 +1,12 @@
-import ChatNav from "../../Components/ChatNav/ChatNav";
+import ChatBox from "../../Components/ChatBox/ChatBox";
+
 import "./Chat.scss";
 
 const Chat = () => {
   return (
     <div className="chat-page-container">
-      <ChatNav />
+      <ChatBox />
     </div>
-
-    // CHAT APP
   );
 };
 
