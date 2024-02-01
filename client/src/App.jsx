@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-
 import { AuthProvider } from "./utils/AuthContext";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";

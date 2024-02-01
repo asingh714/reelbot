@@ -103,12 +103,14 @@ app.post("/postMovies", async (req, res) => {
 const chatMessage = [
   {
     role: "system",
-    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about movies and a question. Your main job is to formulate an informative answer to the question using the provided context. If the answer is not given in the context, find the answer in the conversation history if possible. Feel free to include any relevant additional information you might be aware of. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. `,
+    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information: some context about various movies and a question from the user about movie recommendations. Your objective is to provide an informative, in-depth answer to the user about a movie. If the answer is not given in the context, find the answer in the conversation history if possible. Feel free to include any relevant additional information you might be aware of about the movie recommendation. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. And never share the Movie ID in your answer.`,
   },
 ];
 
 app.post("/movieRec", authenticate, async (req, res) => {
   const { input } = req.body;
+
+  console.log("INPUT", input);
   try {
     const embedding = await createEmbedding(input);
     const { match, id } = await findNearestMovie(embedding);

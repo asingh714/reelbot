@@ -1,12 +1,12 @@
 import { useState } from "react";
 import moment from "moment";
+import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
-import Send from "../../assets/send.svg";
-
-import "./ChatBox.scss";
 import { useAuth } from "../../utils/AuthContext";
+import Send from "../../assets/send.svg";
+import "./ChatBox.scss";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
@@ -17,23 +17,20 @@ const ChatBox = () => {
       timestamp: Date.now(),
     },
   ]);
-
   const { currentUser } = useAuth();
-
   const messagesEndRef = useChatScroll(messages);
 
-  const submitResponse = async (event) => {
-    event.preventDefault();
-    setMessages((prevMessages) => [
-      ...prevMessages,
+  const fetchMovieRecommendation = async (suggestion) => {
+    const response = await axios.post(
+      "http://localhost:3001/movieRec",
       {
-        sender: "user",
-        content: query,
-        timestamp: Date.now(),
+        input: query || suggestion,
       },
-    ]);
-
-    setQuery("");
+      {
+        withCredentials: true,
+      }
+    );
+    return response.data;
   };
 
   const handleKeyDown = (event) => {
@@ -43,9 +40,27 @@ const ChatBox = () => {
     }
   };
 
-  const handleSelectSuggestion = (suggestion) => {
-    setQuery(suggestion);
-    submitResponseWithSuggestion(suggestion);
+  const submitResponse = async (event) => {
+    if (event) event.preventDefault();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "user",
+        content: query,
+        timestamp: Date.now(),
+      },
+    ]);
+
+    const response = await fetchMovieRecommendation();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "app",
+        content: response.answer,
+        timestamp: Date.now(),
+      },
+    ]);
+    setQuery("");
   };
 
   const submitResponseWithSuggestion = async (suggestion) => {
@@ -57,7 +72,22 @@ const ChatBox = () => {
         timestamp: Date.now(),
       },
     ]);
+
+    const response = await fetchMovieRecommendation(suggestion);
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "app",
+        content: response.answer,
+        timestamp: Date.now(),
+      },
+    ]);
     setQuery("");
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    submitResponseWithSuggestion(suggestion);
   };
 
   return (
@@ -102,6 +132,8 @@ const ChatBox = () => {
       {messages.length <= 1 && (
         <SuggestionOptions onSelectSuggestion={handleSelectSuggestion} />
       )}
+
+      {/* {isLoading && <p className="message app">ReelBot is typing...</p>} */}
 
       <div className="chat-input">
         <form onSubmit={submitResponse}>

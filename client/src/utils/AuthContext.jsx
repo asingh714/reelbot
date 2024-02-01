@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    // Retrieve user data from localStorage
     const storedUser = localStorage.getItem("currentUser");
     if (storedUser) {
       setCurrentUser(JSON.parse(storedUser));
@@ -18,10 +17,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const response = await axios.post("http://localhost:3001/login", {
-      username,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:3001/login",
+      {
+        username,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
     setCurrentUser(response.data.user);
     localStorage.setItem("currentUser", JSON.stringify(response.data.user));
   };
