@@ -1,15 +1,14 @@
 @import "../../styles/variables.scss";
 
 .chat-box-container {
-  height: 100%;
+  height: 90%;
   width: 75%;
   border: 1px solid $gray-300;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  // justify-content: space-between;
 
   .messages-list {
     overflow-y: auto;
@@ -29,12 +28,22 @@
       .message-sender-container {
         display: flex;
         font-size: 1.4rem;
-        .message-sender {
+
+        .message-ai {
           font-weight: bold;
           color: $gray-800;
 
           #lighter {
-            // font-weight: normal;
+            color: $gray-500;
+          }
+        }
+        .message-user {
+          font-weight: bold;
+          color: $gray-800;
+          text-align: right;
+          width: 100%;
+
+          #lighter {
             color: $gray-500;
           }
         }
@@ -51,6 +60,49 @@
         }
         &.user {
           background-color: $CHAT-BLUE;
+        }
+      }
+    }
+  }
+
+  .chat-input {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: white;
+
+    form {
+      width: 100%;
+      position: relative;
+
+      .input-field {
+        width: 100%;
+        border: 1px solid $gray-300;
+        padding: 1rem 2.5rem 1rem 1rem;
+        border-radius: 0.5rem;
+        outline: none;
+        resize: none;
+        &:focus {
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+          border: 1px solid $PURPLE;
+          &::placeholder {
+            color: $PURPLE;
+          }
+        }
+      }
+
+      .send-button {
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        outline: none;
+        position: absolute;
+        right: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .send-icon {
+          width: 1.5rem;
+          height: 1.5rem;
         }
       }
     }

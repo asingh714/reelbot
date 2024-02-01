@@ -44,7 +44,11 @@ const ChatBox = () => {
             }
           >
             <div className="message-sender-container">
-              <span className="message-sender">
+              <span
+                className={
+                  message.sender === "app" ? "message-sender" : "message-user"
+                }
+              >
                 {message.sender === "app" ? "ReelBot" : "USER"}
                 <span id="lighter">
                   {" "}
@@ -64,21 +68,20 @@ const ChatBox = () => {
         <div ref={messagesEndRef}></div>
       </div>
 
-      <form onSubmit={submitResponse} className="input-wrapper">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Write a message..."
-          className="input-field"
-        />
-        <img
-          src={Send}
-          alt="Search"
-          className="send-icon"
-          onClick={submitResponse}
-        />
-      </form>
+      <div className="chat-input">
+        <form onSubmit={submitResponse}>
+          <textarea
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Write a message..."
+            className="input-field"
+          />
+          <button type="submit" className="send-button">
+            <img src={Send} alt="Send" className="send-icon" />
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
