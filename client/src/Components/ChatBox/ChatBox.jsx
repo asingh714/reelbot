@@ -4,7 +4,9 @@ import moment from "moment";
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
 import Send from "../../assets/send.svg";
+
 import "./ChatBox.scss";
+import { useAuth } from "../../utils/AuthContext";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
@@ -15,6 +17,8 @@ const ChatBox = () => {
       timestamp: Date.now(),
     },
   ]);
+
+  const { currentUser } = useAuth();
 
   const messagesEndRef = useChatScroll(messages);
 
@@ -74,7 +78,9 @@ const ChatBox = () => {
                   message.sender === "app" ? "message-ai" : "message-user"
                 }
               >
-                {message.sender === "app" ? "ReelBot" : "USER"}
+                {message.sender === "app"
+                  ? "ReelBot"
+                  : `${currentUser.username}`}
                 <span id="lighter">
                   {" "}
                   · {moment(message.timestamp).format("LT")}
