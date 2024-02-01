@@ -1,0 +1,21 @@
+@import "../../styles/variables.scss";
+.suggestions-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.suggestion-button {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 2rem;
+  background-color: $gray-100;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}

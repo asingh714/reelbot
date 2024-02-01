@@ -1,9 +1,10 @@
 import { useState } from "react";
 import moment from "moment";
-import Send from "../../assets/send.svg";
 
-import "./ChatBox.scss";
+import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
+import Send from "../../assets/send.svg";
+import "./ChatBox.scss";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
@@ -31,6 +32,30 @@ const ChatBox = () => {
     setQuery("");
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submitResponse(event);
+    }
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    setQuery(suggestion);
+    submitResponseWithSuggestion(suggestion);
+  };
+
+  const submitResponseWithSuggestion = async (suggestion) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "user",
+        content: suggestion,
+        timestamp: Date.now(),
+      },
+    ]);
+    setQuery("");
+  };
+
   return (
     <div className="chat-box-container">
       <div className="messages-list">
@@ -46,7 +71,7 @@ const ChatBox = () => {
             <div className="message-sender-container">
               <span
                 className={
-                  message.sender === "app" ? "message-sender" : "message-user"
+                  message.sender === "app" ? "message-ai" : "message-user"
                 }
               >
                 {message.sender === "app" ? "ReelBot" : "USER"}
@@ -68,12 +93,17 @@ const ChatBox = () => {
         <div ref={messagesEndRef}></div>
       </div>
 
+      {messages.length <= 1 && (
+        <SuggestionOptions onSelectSuggestion={handleSelectSuggestion} />
+      )}
+
       <div className="chat-input">
         <form onSubmit={submitResponse}>
           <textarea
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Write a message..."
             className="input-field"
           />
