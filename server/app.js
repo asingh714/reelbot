@@ -121,7 +121,7 @@ app.post("/movieRec", authenticate, async (req, res) => {
     });
 
     const { choices } = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: chatMessage,
       temperature: 0.5,
       frequency_penalty: 0.5,

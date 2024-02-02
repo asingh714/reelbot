@@ -84,6 +84,7 @@ const ChatBox = () => {
 
     const response = await fetchMovieRecommendation();
 
+    setQuery("");
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -93,29 +94,8 @@ const ChatBox = () => {
         timestamp: Date.now(),
       },
     ]);
-    setQuery("");
 
-    const movieData = await fetchMovie(response.id);
-    const videoData = await fetchTrailer(response.id);
-    console.log("movieData", movieData);
-    const key = videoData.results[0]?.key;
-    const movie = {
-      poster: movieData.poster_path,
-      title: movieData.title,
-      release_date: movieData.release_date,
-      tagline: movieData.tagline,
-      videoURL: `https://www.youtube.com/watch?v=${key}`,
-    };
-
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        type: "movie",
-        sender: "app",
-        timestamp: Date.now(),
-        ...movie,
-      },
-    ]);
+    await updateMessagesWithMovie(response.id);
   };
 
   const submitResponseWithSuggestion = async (suggestion) => {
@@ -131,6 +111,7 @@ const ChatBox = () => {
 
     const response = await fetchMovieRecommendation(suggestion);
 
+    setQuery("");
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -140,9 +121,36 @@ const ChatBox = () => {
         timestamp: Date.now(),
       },
     ]);
-    setQuery("");
+
+    await updateMessagesWithMovie(response.id);
   };
 
+  const updateMessagesWithMovie = async (id) => {
+    const movieData = await fetchMovie(id);
+    const videoData = await fetchTrailer(id);
+
+    const key = videoData.results[0]?.key;
+    const movie = {
+      poster: movieData.poster_path,
+      backdrop: movieData.backdrop_path,
+      title: movieData.title,
+      release_date: movieData.release_date,
+      tagline: movieData.tagline,
+      overview: movieData.overview,
+      videoURL: `https://www.youtube.com/watch?v=${key}`,
+    };
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        type: "movie",
+        sender: "app",
+        timestamp: Date.now(),
+        ...movie,
+      },
+    ]);
+    return;
+  };
   const handleSelectSuggestion = (suggestion) => {
     submitResponseWithSuggestion(suggestion);
   };
