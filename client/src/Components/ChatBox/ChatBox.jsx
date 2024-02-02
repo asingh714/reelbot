@@ -1,12 +1,12 @@
 import { useState } from "react";
-import moment from "moment";
 import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
-import { useAuth } from "../../utils/AuthContext";
 import Send from "../../assets/send.svg";
 import "./ChatBox.scss";
+import MovieMessage from "../MovieMessage/MovieMessage";
+import TextMessage from "../TextMessage/TextMessage";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
@@ -18,7 +18,7 @@ const ChatBox = () => {
       timestamp: Date.now(),
     },
   ]);
-  const { currentUser } = useAuth();
+
   const messagesEndRef = useChatScroll(messages);
 
   const fetchMovie = async (id) => {
@@ -47,7 +47,6 @@ const ChatBox = () => {
       `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
     );
     // key from data will have youtube id. const youtubeUrl = `https://www.youtube.com/watch?v=${video.key}`;
-
     return data;
   };
 
@@ -98,13 +97,14 @@ const ChatBox = () => {
 
     const movieData = await fetchMovie(response.id);
     const videoData = await fetchTrailer(response.id);
-
+    console.log("movieData", movieData);
+    const key = videoData.results[0]?.key;
     const movie = {
       poster: movieData.poster_path,
       title: movieData.title,
       release_date: movieData.release_date,
       tagline: movieData.tagline,
-      videoURL: `https://www.youtube.com/watch?v=${videoData.key}`,
+      videoURL: `https://www.youtube.com/watch?v=${key}`,
     };
 
     setMessages((prevMessages) => [
@@ -150,51 +150,11 @@ const ChatBox = () => {
   return (
     <div className="chat-box-container">
       <div className="messages-list">
-        {messages.map((message, index) => {
+        {messages.map((message) => {
           if (message.type === "message") {
-            return (
-              <div
-                key={message.timestamp}
-                className={
-                  message.sender === "app"
-                    ? "message-container app"
-                    : "message-container user"
-                }
-              >
-                <div className="message-sender-container">
-                  <span
-                    className={
-                      message.sender === "app" ? "message-ai" : "message-user"
-                    }
-                  >
-                    {message.sender === "app"
-                      ? "ReelBot"
-                      : `${currentUser.username}`}
-                    <span id="lighter">
-                      {" "}
-                      · {moment(message.timestamp).format("LT")}
-                    </span>
-                  </span>
-                </div>
-                <p
-                  className={
-                    message.sender === "app" ? "message app" : "message user"
-                  }
-                >
-                  {message.content}
-                </p>
-              </div>
-            );
+            return <TextMessage key={message.timestamp} message={message} />;
           } else {
-            return (
-              <div key={message.timestamp}>
-                <h1>{message.title}</h1>
-                <img src={message.poster} alt="" />
-                <span>{message.tagline}</span>
-                <span>{message.videoURL}</span>
-                <span>{message.release_date}</span>
-              </div>
-            );
+            return <MovieMessage key={message.timestamp} message={message} />;
           }
         })}
         <div ref={messagesEndRef}></div>

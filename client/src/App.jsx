@@ -1,5 +1,4 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-import { AuthProvider } from "./utils/AuthContext";
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
@@ -11,9 +10,7 @@ function App() {
   const Layout = () => {
     return (
       <div className="main">
-        <AuthProvider>
-          <Outlet />
-        </AuthProvider>
+        <Outlet />
       </div>
     );
   };

@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 
-const AuthContext = React.createContext(null);
+const AuthContext = createContext(null);
 
 export const useAuth = () => useContext(AuthContext);
 
