@@ -10,7 +10,6 @@ import "./ChatBox.scss";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
-  const [movie, setMovie] = useState({});
   const [messages, setMessages] = useState([
     {
       type: "message",
@@ -28,10 +27,28 @@ const ChatBox = () => {
       const { data } = await axios.get(
         `https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`
       );
-      console.log(data);
+
+      /*
+      poster_path --> image 
+      title --> string
+      release_date --> just get year here 
+      tagline --> string 
+      */
+
+      return data;
     } catch (error) {
       console.error("Fetching movie failed:", error);
     }
+  };
+
+  const fetchTrailer = async (id) => {
+    const key = import.meta.env.VITE_TMDB_API_KEY;
+    const { data } = await axios.get(
+      `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
+    );
+    // key from data will have youtube id. const youtubeUrl = `https://www.youtube.com/watch?v=${video.key}`;
+
+    return data;
   };
 
   const fetchMovieRecommendation = async (suggestion) => {
@@ -67,6 +84,7 @@ const ChatBox = () => {
     ]);
 
     const response = await fetchMovieRecommendation();
+
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -78,8 +96,26 @@ const ChatBox = () => {
     ]);
     setQuery("");
 
-    console.log(response.id);
-    await fetchMovie(response.id);
+    const movieData = await fetchMovie(response.id);
+    const videoData = await fetchTrailer(response.id);
+
+    const movie = {
+      poster: movieData.poster_path,
+      title: movieData.title,
+      release_date: movieData.release_date,
+      tagline: movieData.tagline,
+      videoURL: `https://www.youtube.com/watch?v=${videoData.key}`,
+    };
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        type: "movie",
+        sender: "app",
+        timestamp: Date.now(),
+        ...movie,
+      },
+    ]);
   };
 
   const submitResponseWithSuggestion = async (suggestion) => {
@@ -114,39 +150,53 @@ const ChatBox = () => {
   return (
     <div className="chat-box-container">
       <div className="messages-list">
-        {messages.map((message, index) => (
-          <div
-            key={index}
-            className={
-              message.sender === "app"
-                ? "message-container app"
-                : "message-container user"
-            }
-          >
-            <div className="message-sender-container">
-              <span
+        {messages.map((message, index) => {
+          if (message.type === "message") {
+            return (
+              <div
+                key={message.timestamp}
                 className={
-                  message.sender === "app" ? "message-ai" : "message-user"
+                  message.sender === "app"
+                    ? "message-container app"
+                    : "message-container user"
                 }
               >
-                {message.sender === "app"
-                  ? "ReelBot"
-                  : `${currentUser.username}`}
-                <span id="lighter">
-                  {" "}
-                  · {moment(message.timestamp).format("LT")}
-                </span>
-              </span>
-            </div>
-            <p
-              className={
-                message.sender === "app" ? "message app" : "message user"
-              }
-            >
-              {message.content}
-            </p>
-          </div>
-        ))}
+                <div className="message-sender-container">
+                  <span
+                    className={
+                      message.sender === "app" ? "message-ai" : "message-user"
+                    }
+                  >
+                    {message.sender === "app"
+                      ? "ReelBot"
+                      : `${currentUser.username}`}
+                    <span id="lighter">
+                      {" "}
+                      · {moment(message.timestamp).format("LT")}
+                    </span>
+                  </span>
+                </div>
+                <p
+                  className={
+                    message.sender === "app" ? "message app" : "message user"
+                  }
+                >
+                  {message.content}
+                </p>
+              </div>
+            );
+          } else {
+            return (
+              <div key={message.timestamp}>
+                <h1>{message.title}</h1>
+                <img src={message.poster} alt="" />
+                <span>{message.tagline}</span>
+                <span>{message.videoURL}</span>
+                <span>{message.release_date}</span>
+              </div>
+            );
+          }
+        })}
         <div ref={messagesEndRef}></div>
       </div>
 
