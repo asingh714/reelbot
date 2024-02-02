@@ -10,8 +10,10 @@ import "./ChatBox.scss";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
+  const [movie, setMovie] = useState({});
   const [messages, setMessages] = useState([
     {
+      type: "message",
       sender: "app",
       content: "Hi I'm ReelBot! How can I help you find a movie?",
       timestamp: Date.now(),
@@ -19,6 +21,18 @@ const ChatBox = () => {
   ]);
   const { currentUser } = useAuth();
   const messagesEndRef = useChatScroll(messages);
+
+  const fetchMovie = async (id) => {
+    try {
+      const key = import.meta.env.VITE_TMDB_API_KEY;
+      const { data } = await axios.get(
+        `https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`
+      );
+      console.log(data);
+    } catch (error) {
+      console.error("Fetching movie failed:", error);
+    }
+  };
 
   const fetchMovieRecommendation = async (suggestion) => {
     const response = await axios.post(
@@ -45,6 +59,7 @@ const ChatBox = () => {
     setMessages((prevMessages) => [
       ...prevMessages,
       {
+        type: "message",
         sender: "user",
         content: query,
         timestamp: Date.now(),
@@ -55,18 +70,23 @@ const ChatBox = () => {
     setMessages((prevMessages) => [
       ...prevMessages,
       {
+        type: "message",
         sender: "app",
         content: response.answer,
         timestamp: Date.now(),
       },
     ]);
     setQuery("");
+
+    console.log(response.id);
+    await fetchMovie(response.id);
   };
 
   const submitResponseWithSuggestion = async (suggestion) => {
     setMessages((prevMessages) => [
       ...prevMessages,
       {
+        type: "message",
         sender: "user",
         content: suggestion,
         timestamp: Date.now(),
@@ -78,6 +98,7 @@ const ChatBox = () => {
     setMessages((prevMessages) => [
       ...prevMessages,
       {
+        type: "message",
         sender: "app",
         content: response.answer,
         timestamp: Date.now(),

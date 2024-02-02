@@ -26,7 +26,7 @@ const SuggestionOptions = ({ onSelectSuggestion }) => {
 };
 
 SuggestionOptions.propTypes = {
-  onSelectSuggestion: PropTypes.func.isRequired,
+  onSelectSuggestion: PropTypes.func,
 };
 
 export default SuggestionOptions;
