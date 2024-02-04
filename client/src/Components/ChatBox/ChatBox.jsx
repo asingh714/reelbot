@@ -110,7 +110,7 @@ const ChatBox = () => {
     ]);
 
     const response = await fetchMovieRecommendation(suggestion);
-
+    console.log("movie", response);
     setQuery("");
     setMessages((prevMessages) => [
       ...prevMessages,

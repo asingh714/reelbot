@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import moment from "moment";
+import YouTube from "../../assets/YouTube.svg";
 
 import "./MovieMessage.scss";
 
@@ -11,9 +12,16 @@ const MovieMessage = ({ message }) => {
         <h2>
           {message.title} ({moment(message.release_date).format("YYYY")})
         </h2>
-        <p>{message.overview}</p>
         <span>{message.tagline}</span>
-        <a href={message.videoURL} target="_blank" rel="noopener noreferrer">
+
+        <p>{message.overview}</p>
+        <a
+          href={message.videoURL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="trailer-button"
+        >
+          <img src={YouTube} alt="YouTube Logo" className="youtube-logo" />
           Watch trailer
         </a>
       </div>
