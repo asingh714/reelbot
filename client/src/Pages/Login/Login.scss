@@ -1,6 +1,19 @@
+@import "../../styles/variables.scss";
+
 .login-page-container {
   height: calc(100vh - 2rem);
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+
+  .login-header {
+    font-size: 4rem;
+  }
+
+  .login-subheader {
+    font-size: 1.8rem;
+    color: $gray-600;
+    margin-bottom: 5rem;
+  }
 }

@@ -34,10 +34,10 @@
   }
 
   button {
-    background-color: $LIGHT-PURPLE;
+    background-color: $PURPLE;
     border: none;
     color: white;
-    padding: 0.5rem 0rem;
+    padding: 1rem 0rem;
     border-radius: 1.5rem;
     margin-top: 2.5rem;
     font-size: 1.4rem;
@@ -70,12 +70,12 @@
 
   .signup-link {
     margin-top: 5rem;
+    text-align: center;
 
     #darker {
       color: gray;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1.2rem;
     }
   }
 }

@@ -1,7 +1,7 @@
 import { useAuth } from "../../utils/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../assets/logo.svg";
+import Alert from "../../assets/alert-circle.svg";
 
 import "./LoginForm.scss";
 
@@ -27,11 +27,9 @@ const LoginForm = () => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <h1>Welcome back!</h1>
-      <img src={Logo} alt="" className="logo" />
       {authError && (
         <p className="error-login-text">
-          <img src="/alert-circle.svg" alt="Error" />
+          <img src={Alert} alt="Error" />
           {authError}
         </p>
       )}
@@ -48,7 +46,7 @@ const LoginForm = () => {
         className={authError ? "error" : ""}
         name="password"
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Your password"
+        placeholder="Your Password"
         type="password"
       />
       <button type="submit">Log in</button>

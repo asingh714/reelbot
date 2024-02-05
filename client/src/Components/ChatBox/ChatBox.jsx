@@ -28,13 +28,6 @@ const ChatBox = () => {
         `https://api.themoviedb.org/3/movie/${id}?api_key=${key}&language=en-US`
       );
 
-      /*
-      poster_path --> image 
-      title --> string
-      release_date --> just get year here 
-      tagline --> string 
-      */
-
       return data;
     } catch (error) {
       console.error("Fetching movie failed:", error);
@@ -46,11 +39,13 @@ const ChatBox = () => {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${key}&language=en-US`
     );
-    // key from data will have youtube id. const youtubeUrl = `https://www.youtube.com/watch?v=${video.key}`;
     return data;
   };
 
   const fetchMovieRecommendation = async (suggestion) => {
+    console.log("query", query);
+    console.log("suggestion", suggestion);
+
     const response = await axios.post(
       "http://localhost:3001/movieRec",
       {
