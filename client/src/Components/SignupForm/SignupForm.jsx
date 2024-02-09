@@ -12,19 +12,22 @@ const SignUpForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [authError, setAuthError] = useState(null);
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setAuthError(null);
+    if (password !== confirmPassword) {
+      setAuthError("Your passwords must match");
+    }
 
     try {
-      await login(username, password);
+      await register(username, password, email);
       navigate("/chat");
     } catch (err) {
-      setAuthError(err.response?.data?.msg || "Failed to log in");
+      setAuthError(err.response?.data?.msg || "Failed to sign up");
     }
   };
 

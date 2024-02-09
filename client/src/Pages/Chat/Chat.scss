@@ -1,6 +1,9 @@
+@import "../../styles/variables.scss";
+
 .chat-page-container {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: $gray-50;
 }

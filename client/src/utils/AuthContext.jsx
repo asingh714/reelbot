@@ -31,6 +31,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("currentUser", JSON.stringify(response.data.user));
   };
 
+  const register = async (username, password, email) => {
+    const response = await axios.post(
+      "http://localhost:3001/register",
+      {
+        username,
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    setCurrentUser(response.data.user);
+    localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+  };
+
   const logout = () => {
     localStorage.removeItem("currentUser");
     setCurrentUser(null);
@@ -39,6 +55,7 @@ export const AuthProvider = ({ children }) => {
   const value = {
     currentUser,
     login,
+    register,
     logout,
   };
 
