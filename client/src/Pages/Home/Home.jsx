@@ -1,11 +1,25 @@
+import { motion } from "framer-motion";
+
+import "./Home.scss";
 import badgeCheck from "../../assets/badge-check.svg";
 import Logo from "../../assets/logo.svg";
-import { motion } from "framer-motion";
-import "./Home.scss";
+import NavBar from "../../Components/NavBar/NavBar";
 
 const Home = () => {
   return (
-    <motion.div className="home-page-container">
+    <motion.div
+      className="home-page-container"
+      animate={{
+        backgroundPosition: ["0% 0%", "100% 0%"],
+      }}
+      transition={{
+        duration: 60,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    >
+      <NavBar />
+
       <main className="hero-section">
         <div className="hero-main-section">
           <motion.img
@@ -27,9 +41,8 @@ const Home = () => {
           />
           <h1 className="main-heading">Your Personal Movie Advisor</h1>
           <p className="sub-heading">
-            Looking for the perfect movie? With ReelBot, get personalized
-            recommendations tailored to your taste. Enjoy endless movie nights
-            with ease!
+            Find your perfect movie with ReelBot. Personalized picks, endless
+            enjoyment.
           </p>
           <ul className="list-items">
             <div className="list-item">
@@ -45,7 +58,9 @@ const Home = () => {
               <li>Instant recommendations</li>
             </div>
           </ul>
-          <button className="header-cta">Start Chatting - It&apos;s Free!</button>
+          <button className="header-cta">
+            Start Chatting - It&apos;s Free!
+          </button>
         </div>
 
         <div className="hero-video-section">
