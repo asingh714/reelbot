@@ -70,27 +70,28 @@ const Home = () => {
             <img src={Logo} alt="" className="video-test" />
           </div>
         </main>
+
         <section className="feature-section">
           <div className="feature">
             <img src={EyeOff} alt="" className="feature-icon" />
-            <h2>Privacy First</h2>
-            <p>
+            <h2 className="feature-heading">Privacy First</h2>
+            <p className="feature-description">
               Your data stays yours — ReelBot doesn&apos;t collect it. Enjoy
               personalized movie picks in complete privacy.
             </p>
           </div>
           <div className="feature">
             <img src={Zap} alt="" className="feature-icon" />
-            <h2>Feature-Rich</h2>
-            <p>
+            <h2 className="feature-heading">Feature-Rich</h2>
+            <p className="feature-description">
               Rate films, manage watchlists, and explore with ReelBot&apos;s
               seamless, rich features for a tailored discovery.
             </p>
           </div>
           <div className="feature">
             <img src={Infinite} alt="" className="feature-icon" />
-            <h2>Unlimited Discovery</h2>
-            <p>
+            <h2 className="feature-heading">Unlimited Discovery</h2>
+            <p className="feature-description">
               No caps on recommendations. ReelBot is your endless cinema
               library, crafted to your evolving tastes.
             </p>
