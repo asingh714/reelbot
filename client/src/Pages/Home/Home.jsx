@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import validator from "validator";
 
 import "./Home.scss";
 import badgeCheck from "../../assets/badge-check.svg";
@@ -11,6 +13,21 @@ import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
 
 const Home = () => {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState(null);
+  const [notification, setNotification] = useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+
+    if (validator.isEmail(email)) {
+      setNotification("Success! You are now subscribed.");
+      setEmail("");
+    } else {
+      setError("Please enter a valid email address.");
+    }
+  };
+
   return (
     <motion.div
       className="home-page-container"
@@ -101,15 +118,32 @@ const Home = () => {
         <FAQSection />
 
         <section className="cta-section">
-          <h2>Stay in the loop</h2>
-          <p>
+          <h2 className="cta-heading">Stay in the loop</h2>
+          <p className="cta-description">
             Be the first to discover what&apos;s new with ReelBot. Join our
             community and be at the forefront of the latest movie
-            recommendations and features. Share your insights and help shape the
-            future of personalized movie discovery.
+            recommendations and features.
           </p>
 
-          <form action=""></form>
+          <div className="messages">
+            {notification && (
+              <p className="notification-message">{notification}</p>
+            )}
+            {error && <p className="error-message">{error}</p>}
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <input
+              className={`cta-input ${error} ? "error" : ""`}
+              name="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="🎥 Join 2.5K+ movie enthusiasts following ReelBot's journey"
+              type="text"
+            />
+            <button type="submit" className="cta-button">
+              Subscribe
+            </button>
+          </form>
         </section>
       </div>
     </motion.div>
