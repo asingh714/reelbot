@@ -9,74 +9,80 @@
   align-items: center;
   flex-direction: column;
 
-  .hero-section {
+  .home-section {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     background-color: white;
     padding: 5rem 10rem;
     width: 80%;
     border-radius: 5rem;
 
-    .hero-main-section {
-      width: 50%;
+    .hero-section {
+      display: flex;
 
-      .hero-logo {
-        width: 10rem;
-        height: 10rem;
-      }
+      .hero-main-section {
+        width: 50%;
 
-      .main-heading {
-        font-size: 4rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-      }
+        .hero-logo {
+          width: 10rem;
+          height: 10rem;
+        }
 
-      .sub-heading {
-        font-size: 2rem;
-        font-weight: 600;
-        margin-bottom: 2rem;
-        color: $gray-500;
-      }
+        .main-heading {
+          font-size: 4rem;
+          font-weight: 700;
+          margin-bottom: 2rem;
+        }
 
-      .list-items {
-        margin-bottom: 4rem;
-
-        .list-item {
-          display: flex;
-          gap: 1rem;
-          font-size: 1.6rem;
-          color: $gray-400;
+        .sub-heading {
+          font-size: 2rem;
           font-weight: 600;
-          margin-bottom: 1rem;
+          margin-bottom: 2rem;
+          color: $gray-500;
+        }
+
+        .list-items {
+          margin-bottom: 4rem;
+
+          .list-item {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.6rem;
+            color: $gray-400;
+            font-weight: 600;
+            margin-bottom: 1rem;
+          }
+        }
+
+        .header-cta {
+          border: 0;
+          color: white;
+          padding: 1.5rem 2rem;
+          border-radius: 2.5rem;
+          font-size: 1.6rem;
+          font-weight: 600;
+          cursor: pointer;
+          background-color: #663dff;
+          background-image: linear-gradient(
+            319deg,
+            #7002fe 0%,
+            #aa00ff 67%,
+            #cc4499 100%
+          );
         }
       }
 
-      .header-cta {
-        border: 0;
-        color: white;
-        padding: 1.5rem 2rem;
-        border-radius: 2.5rem;
-        font-size: 1.6rem;
-        font-weight: 600;
-        cursor: pointer;
-        background-color: #663dff;
-        background-image: linear-gradient(
-          319deg,
-          #7002fe 0%,
-          #aa00ff 67%,
-          #cc4499 100%
-        );
-      }
-    }
+      .hero-video-section {
+        width: 50%;
+        margin-left: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-    .hero-video-section {
-      width: 50%;
-      margin-left: auto;
-
-      .video-test {
-        width: 25rem;
-        height: 25rem;
+        .video-test {
+          width: 25rem;
+          height: 25rem;
+        }
       }
     }
   }
