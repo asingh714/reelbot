@@ -1,0 +1,35 @@
+@import "../../styles/variables.scss";
+
+.faq-section {
+  margin-bottom: 15rem;
+
+  h2 {
+    margin-bottom: 4rem;
+  }
+  .faq-items {
+    // display: grid;
+    // grid-template-columns: repeat(2, 1fr); // Two items per row
+    // gap: 2rem;
+    // grid-auto-rows: min-content;
+
+    .faq-item {
+      background-color: #673dff0a;
+      padding: 2rem;
+      overflow: hidden;
+      border-bottom: 1px solid #673dff0a;
+
+      .faq-question {
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+      }
+      .faq-answer {
+        margin-top: 1rem;
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: $gray-500;
+        line-height: 1.75;
+      }
+    }
+  }
+}

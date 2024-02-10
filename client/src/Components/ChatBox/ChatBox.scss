@@ -10,8 +10,6 @@
   flex-direction: column;
   background-color: white;
 
-  // justify-content: space-between;
-
   .messages-list {
     overflow-y: auto;
     padding: 2rem;
@@ -56,7 +54,6 @@
         margin-bottom: 1rem;
         border-radius: 1rem;
         color: $gray-900;
-        // font-weight: 600;
 
         &.app {
           background-color: $CHAT-YELLOW;

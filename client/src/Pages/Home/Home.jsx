@@ -8,6 +8,7 @@ import EyeOff from "../../assets/eye-off.svg";
 
 import Logo from "../../assets/logo.svg";
 import NavBar from "../../Components/NavBar/NavBar";
+import FAQSection from "../../Components/FAQ/FAQ";
 
 const Home = () => {
   return (
@@ -96,6 +97,19 @@ const Home = () => {
               library, crafted to your evolving tastes.
             </p>
           </div>
+        </section>
+        <FAQSection />
+
+        <section className="cta-section">
+          <h2>Stay in the loop</h2>
+          <p>
+            Be the first to discover what&apos;s new with ReelBot. Join our
+            community and be at the forefront of the latest movie
+            recommendations and features. Share your insights and help shape the
+            future of personalized movie discovery.
+          </p>
+
+          <form action=""></form>
         </section>
       </div>
     </motion.div>
