@@ -11,6 +11,7 @@ import EyeOff from "../../assets/eye-off.svg";
 import Logo from "../../assets/logo.svg";
 import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
+import Footer from "../../Components/Footer/Footer";
 
 const Home = () => {
   const [email, setEmail] = useState("");
@@ -146,6 +147,7 @@ const Home = () => {
           </form>
         </section>
       </div>
+      <Footer />
     </motion.div>
   );
 };
