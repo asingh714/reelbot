@@ -1,9 +1,11 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+
 import Home from "./Pages/Home/Home";
 import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Chat from "./Pages/Chat/Chat";
 import NotFound from "./Pages/NotFound/NotFound";
+import RequireAuth from "./utils/RequireAuth";
 import "./styles/global.scss";
 
 function App() {
@@ -34,7 +36,13 @@ function App() {
         },
         {
           path: "/chat",
-          element: <Chat />,
+          element: <RequireAuth />,
+          children: [
+            {
+              path: "",
+              element: <Chat />,
+            },
+          ],
         },
         {
           path: "*",
