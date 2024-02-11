@@ -7,7 +7,6 @@ import badgeCheck from "../../assets/badge-check.svg";
 import Zap from "../../assets/zap.svg";
 import Infinite from "../../assets/infinity.svg";
 import EyeOff from "../../assets/eye-off.svg";
-
 import Logo from "../../assets/logo.svg";
 import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
@@ -36,7 +35,7 @@ const Home = () => {
         backgroundPosition: ["0% 0%", "100% 0%"],
       }}
       transition={{
-        duration: 60,
+        duration: 80,
         repeat: Infinity,
         ease: "linear",
       }}

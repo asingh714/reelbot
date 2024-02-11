@@ -21,7 +21,8 @@ nav {
   .nav-links {
     display: flex;
     gap: 2rem;
-    a {
+    a,
+    span {
       color: $gray-500;
       font-weight: 600;
       cursor: pointer;

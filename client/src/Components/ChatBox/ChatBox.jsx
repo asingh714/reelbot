@@ -10,6 +10,8 @@ import TextMessage from "../TextMessage/TextMessage";
 
 const ChatBox = () => {
   const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const [messages, setMessages] = useState([
     {
       type: "message",
@@ -43,19 +45,23 @@ const ChatBox = () => {
   };
 
   const fetchMovieRecommendation = async (suggestion) => {
-    console.log("query", query);
-    console.log("suggestion", suggestion);
-
-    const response = await axios.post(
-      "http://localhost:3001/movieRec",
-      {
-        input: query || suggestion,
-      },
-      {
-        withCredentials: true,
-      }
-    );
-    return response.data;
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/movieRec",
+        {
+          input: query || suggestion,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      setIsLoading(false);
+      return response.data;
+    } catch (error) {
+      console.error("Fetching movie recommendation failed:", error);
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (event) => {
@@ -105,7 +111,6 @@ const ChatBox = () => {
     ]);
 
     const response = await fetchMovieRecommendation(suggestion);
-    console.log("movie", response);
     setQuery("");
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -167,7 +172,7 @@ const ChatBox = () => {
         <SuggestionOptions onSelectSuggestion={handleSelectSuggestion} />
       )}
 
-      {/* {isLoading && <p className="message app">ReelBot is typing...</p>} */}
+      {isLoading && <p className="message-typing">ReelBot is typing...</p>}
 
       <div className="chat-input">
         <form onSubmit={submitResponse}>
