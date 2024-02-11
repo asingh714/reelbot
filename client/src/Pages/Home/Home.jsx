@@ -69,7 +69,7 @@ const Home = () => {
             <ul className="list-items">
               <div className="list-item">
                 <img src={badgeCheck} alt="check-mark" />
-                <li>No sign-up required</li>
+                <li>No data stored</li>
               </div>
               <div className="list-item">
                 <img src={badgeCheck} alt="check-mark" />
