@@ -7,12 +7,12 @@ const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [reelBotUser, setReelBotUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("currentUser");
+    const storedUser = localStorage.getItem("reelBotUser");
     if (storedUser) {
-      setCurrentUser(JSON.parse(storedUser));
+      setReelBotUser(JSON.parse(storedUser));
     }
   }, []);
 
@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true,
       }
     );
-    setCurrentUser(response.data.user);
-    localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+    setReelBotUser(response.data.user);
+    localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
   const register = async (username, password, email) => {
@@ -43,17 +43,17 @@ export const AuthProvider = ({ children }) => {
         withCredentials: true,
       }
     );
-    setCurrentUser(response.data.user);
-    localStorage.setItem("currentUser", JSON.stringify(response.data.user));
+    setReelBotUser(response.data.user);
+    localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
   const logout = () => {
-    localStorage.removeItem("currentUser");
-    setCurrentUser(null);
+    localStorage.removeItem("reelBotUser");
+    setReelBotUser(null);
   };
 
   const value = {
-    currentUser,
+    reelBotUser,
     login,
     register,
     logout,

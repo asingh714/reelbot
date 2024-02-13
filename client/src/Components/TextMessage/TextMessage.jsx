@@ -5,7 +5,7 @@ import { useAuth } from "../../utils/AuthContext";
 import "./TextMessage.scss";
 
 const TextMessage = ({ message }) => {
-  const { currentUser } = useAuth();
+  const { reelBotUser } = useAuth();
   return (
     <div
       key={message.timestamp}
@@ -17,7 +17,7 @@ const TextMessage = ({ message }) => {
         <span
           className={message.sender === "app" ? "message-ai" : "message-user"}
         >
-          {message.sender === "app" ? "ReelBot" : currentUser.username}
+          {message.sender === "app" ? "ReelBot" : reelBotUser.username}
           <span id="lighter"> · {moment(message.timestamp).format("LT")}</span>
         </span>
       </div>

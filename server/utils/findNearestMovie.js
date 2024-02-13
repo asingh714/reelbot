@@ -13,5 +13,7 @@ export async function findNearestMovie(embedding) {
     match_count: 1,
   });
 
+  console.log("data", data);
+
   return { match: data[0].content, id: data[0].movie_id };
 }

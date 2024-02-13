@@ -36,9 +36,9 @@ app.post("/logout", logout);
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
-    let page = 160;
+    let page = 176;
     let movies = [];
-    let totalPages = 175;
+    let totalPages = 190;
 
     while (page <= totalPages) {
       const response = await axios.get(
@@ -100,16 +100,15 @@ app.post("/postMovies", async (req, res) => {
   }
 });
 
-const chatMessage = [
-  {
-    role: "system",
-    content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information: some context about various movies and a question from the user about movie recommendations. Your objective is to provide an informative, in-depth answer to the user about a movie. If the answer is not given in the context, find the answer in the conversation history if possible. Feel free to include any relevant additional information you might be aware of about the movie recommendation. If you are unsure and cannot find the answer, say, "Sorry, I don't know the answer." Please do not make up the answer. And never share the Movie ID in your answer.`,
-  },
-];
-
 app.post("/movieRec", authenticate, async (req, res) => {
   const { input } = req.body;
 
+  const chatMessage = [
+    {
+      role: "system",
+      content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about a movies and a question.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context. If the context is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." Please do not make up the answer. And never share the Movie ID in your answer.`,
+    },
+  ];
   console.log("INPUT", input);
   try {
     const embedding = await createEmbedding(input);
@@ -117,8 +116,10 @@ app.post("/movieRec", authenticate, async (req, res) => {
 
     chatMessage.push({
       role: "user",
-      content: `Context: ${match} Question: ${input} Movie id: ${id}`,
+      content: `Question: ${input}. Context: ${match}`,
     });
+
+    console.log("chatMessage", chatMessage);
 
     const { choices } = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -127,6 +128,7 @@ app.post("/movieRec", authenticate, async (req, res) => {
       frequency_penalty: 0.5,
     });
 
+    console.log("choices", choices);
     chatMessage.push(choices[0].message);
 
     res.status(200).json({ answer: choices[0].message.content, id });

@@ -11,11 +11,15 @@ import Logo from "../../assets/logo.svg";
 import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
 import Footer from "../../Components/Footer/Footer";
+import { useAuth } from "../../utils/AuthContext";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState("");
+  const { reelBotUser } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -80,9 +84,9 @@ const Home = () => {
                 <li>Instant recommendations</li>
               </div>
             </ul>
-            <button className="header-cta">
+            <Link className="header-cta" to={reelBotUser ? "/chat" : "/login"}>
               Start Chatting - It&apos;s Free!
-            </button>
+            </Link>
           </div>
           <div className="hero-video-section">
             <img src={Logo} alt="" className="video-test" />

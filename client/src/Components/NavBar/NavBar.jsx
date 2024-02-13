@@ -5,9 +5,9 @@ import Logo from "../../assets/logo.svg";
 import "./NavBar.scss";
 
 const NavBar = () => {
-  const { currentUser, logout } = useAuth();
+  const { reelBotUser, logout } = useAuth();
 
-  if (currentUser) {
+  if (reelBotUser) {
     return (
       <nav>
         <Link to="/" className="logo-container">

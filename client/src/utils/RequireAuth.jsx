@@ -2,9 +2,9 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 const RequireAuth = () => {
-  const { currentUser } = useAuth();
+  const { reelBotUser } = useAuth();
 
-  return currentUser ? <Outlet /> : <Navigate to="/login" replace />;
+  return reelBotUser ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default RequireAuth;
