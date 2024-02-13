@@ -35,7 +35,7 @@ const Home = () => {
         backgroundPosition: ["0% 0%", "100% 0%"],
       }}
       transition={{
-        duration: 80,
+        duration: 60,
         repeat: Infinity,
         ease: "linear",
       }}
@@ -102,8 +102,8 @@ const Home = () => {
             <img src={Zap} alt="" className="feature-icon" />
             <h2 className="feature-heading">Feature-Rich</h2>
             <p className="feature-description">
-              Rate films, manage watchlists, and explore with ReelBot&apos;s
-              seamless, rich features for a tailored discovery.
+              Get films and explore with ReelBot&apos;s seamless, rich features
+              for a tailored discovery.
             </p>
           </div>
           <div className="feature">
