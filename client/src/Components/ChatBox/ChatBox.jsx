@@ -223,7 +223,7 @@ const ChatBox = () => {
         <SuggestionOptions onSelectSuggestion={handleSelectSuggestion} />
       )}
 
-      {isLoading && <p className="message-typing">ReelBot is typing...</p>}
+      {isLoading && <p className="message-typing">ReelBot is thinking...</p>}
 
       <div className="chat-input">
         <form onSubmit={submitResponse}>
