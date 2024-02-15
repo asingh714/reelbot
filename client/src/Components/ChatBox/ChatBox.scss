@@ -10,6 +10,15 @@
   flex-direction: column;
   background-color: white;
 
+  .new-chat-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    align-self: flex-end;
+    margin-top: 3rem;
+    margin-right: 3rem;
+    cursor: pointer;
+  }
+
   .messages-list {
     overflow-y: auto;
     padding: 2rem;

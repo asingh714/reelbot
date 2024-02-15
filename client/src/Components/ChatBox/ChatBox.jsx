@@ -3,6 +3,7 @@ import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
+import NewChat from "../../assets/new-chat.svg";
 import Send from "../../assets/send.svg";
 import "./ChatBox.scss";
 import MovieMessage from "../MovieMessage/MovieMessage";
@@ -12,6 +13,15 @@ const ChatBox = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
+  const [messages, setMessages] = useState([
+    {
+      type: "message",
+      sender: "app",
+      content: "Hi I'm ReelBot! How can I help you find a movie?",
+      timestamp: Date.now(),
+    },
+  ]);
+  const messagesEndRef = useChatScroll(messages);
 
   useEffect(() => {
     if (conversationId) {
@@ -26,21 +36,28 @@ const ChatBox = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (
+      messages.length === 1 &&
+      messages[0].content === "Hi I'm ReelBot! How can I help you find a movie?"
+    ) {
+      startNewConversation();
+    }
+  }, [messages]);
+
   const startNewConversation = () => {
     localStorage.removeItem("conversationId");
     setConversationId(null);
+    setMessages([
+      {
+        type: "message",
+        sender: "app",
+        content: "Hi I'm ReelBot! How can I help you find a movie?",
+        timestamp: Date.now(),
+      },
+    ]);
+    setQuery("");
   };
-
-  const [messages, setMessages] = useState([
-    {
-      type: "message",
-      sender: "app",
-      content: "Hi I'm ReelBot! How can I help you find a movie?",
-      timestamp: Date.now(),
-    },
-  ]);
-
-  const messagesEndRef = useChatScroll(messages);
 
   const fetchMovie = async (id) => {
     try {
@@ -185,6 +202,12 @@ const ChatBox = () => {
 
   return (
     <div className="chat-box-container">
+      <img
+        src={NewChat}
+        alt="New Chat"
+        className="new-chat-icon"
+        onClick={startNewConversation}
+      />
       <div className="messages-list">
         {messages.map((message) => {
           if (message.type === "message") {

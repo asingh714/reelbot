@@ -167,7 +167,7 @@ app.post("/movieRec", authenticate, async (req, res) => {
       conversationId = existingConversationId;
     } else {
       conversationId = await startNewConversation();
-      const initialSystemMessage = `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - a question from the user and some context from the system.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context. If the context is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." This is very important: only answer with the context provided. And never share the Movie ID in your answer.`;
+      const initialSystemMessage = `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - a question from the user and some context from the system.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context from the system. Make sure you review the conversation history if possible. If the question is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." This is very important: only answer with the context provided. And never share the Movie ID in your answer.`;
       await storeMessage(conversationId, "system", initialSystemMessage);
     }
 
