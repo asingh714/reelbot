@@ -19,6 +19,11 @@ import { createEmbedding } from "./utils/createEmbeddings.js";
 import { findNearestMovie } from "./utils/findNearestMovie.js";
 import { login, register, logout } from "./auth.js";
 import { authenticate } from "./utils/authenticate.js";
+// import {
+//   startNewConversation,
+//   storeMessage,
+//   getConversationHistory,
+// } from "./utils/createMessages.js";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -100,38 +105,92 @@ app.post("/postMovies", async (req, res) => {
   }
 });
 
-app.post("/movieRec", authenticate, async (req, res) => {
-  const { input } = req.body;
+async function startNewConversation() {
+  const insertResponse = await supabase.from("conversations").insert([{}]);
 
-  const chatMessage = [
-    {
-      role: "system",
-      content: `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - some context about a movies and a question.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context. If the context is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." Please do not make up the answer. And never share the Movie ID in your answer.`,
-    },
-  ];
-  console.log("INPUT", input);
+  if (insertResponse.error) {
+    console.error("Insert error:", insertResponse.error);
+    throw new Error("Failed to start a new conversation");
+  }
+
+  const { data, error } = await supabase
+    .from("conversations")
+    .select("id")
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error("Retrieval error:", error);
+    throw new Error("Failed to retrieve new conversation ID");
+  }
+
+  if (data && data.length > 0) {
+    return data[0].id;
+  } else {
+    throw new Error("No conversation ID found after insertion");
+  }
+}
+
+async function storeMessage(conversationId, role, content) {
+  const { data, error } = await supabase
+    .from("conversation_history")
+    .insert([{ conversation_id: conversationId, role, content }]);
+
+  if (error) {
+    console.error("Store message error:", error.message);
+    throw new Error(`Failed to store message: ${error.message}`);
+  }
+  return data;
+}
+
+async function getConversationHistory(conversationId) {
+  const { data, error } = await supabase
+    .from("conversation_history")
+    .select("role, content")
+    .eq("conversation_id", conversationId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error("Failed to retrieve conversation history");
+  return data;
+}
+
+app.post("/movieRec", authenticate, async (req, res) => {
+  const { input, conversationId: existingConversationId } = req.body;
+
+  let conversationId;
+
   try {
     const embedding = await createEmbedding(input);
     const { match, id } = await findNearestMovie(embedding);
 
-    chatMessage.push({
-      role: "user",
-      content: `Question: ${input}. Context: ${match}`,
-    });
+    if (existingConversationId) {
+      conversationId = existingConversationId;
+    } else {
+      conversationId = await startNewConversation();
+      const initialSystemMessage = `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - a question from the user and some context from the system.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context. If the context is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." This is very important: only answer with the context provided. And never share the Movie ID in your answer.`;
+      await storeMessage(conversationId, "system", initialSystemMessage);
+    }
 
-    console.log("chatMessage", chatMessage);
+    const userQuestion = `Question: ${input}.`;
+    await storeMessage(conversationId, "user", userQuestion);
+
+    const context = `Context: ${match}`;
+    await storeMessage(conversationId, "system", context);
+
+    const conversationHistory = await getConversationHistory(conversationId);
 
     const { choices } = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      messages: chatMessage,
+      messages: conversationHistory,
       temperature: 0.5,
       frequency_penalty: 0.5,
     });
 
-    console.log("choices", choices);
-    chatMessage.push(choices[0].message);
+    await storeMessage(conversationId, "assistant", choices[0].message.content);
 
-    res.status(200).json({ answer: choices[0].message.content, id });
+    res
+      .status(200)
+      .json({ answer: choices[0].message.content, id, conversationId });
   } catch (error) {
     res.status(500).send("Error with search");
   }

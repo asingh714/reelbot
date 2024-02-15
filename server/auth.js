@@ -36,9 +36,9 @@ export const register = async (req, res) => {
       .select("email")
       .eq("email", email);
 
-    if (error) {
-      throw error;
-    }
+    // if (error) {
+    //   throw error;
+    // }
 
     if (data.length > 0) {
       return res.status(400).json({ msg: "Email already exists" });
@@ -83,9 +83,9 @@ export const login = async (req, res) => {
       .eq("username", username)
       .single();
 
-    if (error) {
-      throw error;
-    }
+    // if (error) {
+    //   throw error;
+    // }
 
     if (!users) {
       return res.status(400).json({ msg: "Invalid credentials" });

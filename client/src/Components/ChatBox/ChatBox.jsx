@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
@@ -11,6 +11,25 @@ import TextMessage from "../TextMessage/TextMessage";
 const ChatBox = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationId, setConversationId] = useState(null);
+
+  useEffect(() => {
+    if (conversationId) {
+      localStorage.setItem("conversationId", conversationId);
+    }
+  }, [conversationId]);
+
+  useEffect(() => {
+    const storedConversationId = localStorage.getItem("conversationId");
+    if (storedConversationId) {
+      setConversationId(storedConversationId);
+    }
+  }, []);
+
+  const startNewConversation = () => {
+    localStorage.removeItem("conversationId");
+    setConversationId(null);
+  };
 
   const [messages, setMessages] = useState([
     {
@@ -49,14 +68,23 @@ const ChatBox = () => {
     try {
       const response = await axios.post(
         "http://localhost:3001/movieRec",
+
         {
           input: query || suggestion,
+          conversationId,
         },
         {
           withCredentials: true,
         }
       );
       setIsLoading(false);
+
+      if (
+        response.data.conversationId &&
+        response.data.conversationId !== conversationId
+      ) {
+        setConversationId(response.data.conversationId);
+      }
       return response.data;
     } catch (error) {
       console.error("Fetching movie recommendation failed:", error);
