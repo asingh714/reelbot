@@ -41,7 +41,8 @@ const ChatBox = () => {
       messages.length === 1 &&
       messages[0].content === "Hi I'm ReelBot! How can I help you find a movie?"
     ) {
-      startNewConversation();
+      localStorage.removeItem("conversationId");
+      setConversationId(null);
     }
   }, [messages]);
 

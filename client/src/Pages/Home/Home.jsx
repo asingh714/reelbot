@@ -8,6 +8,7 @@ import Zap from "../../assets/zap.svg";
 import Infinite from "../../assets/infinity.svg";
 import EyeOff from "../../assets/eye-off.svg";
 import Logo from "../../assets/logo.svg";
+import Demo from "../../assets/Reelbot.mp4";
 import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
 import Footer from "../../Components/Footer/Footer";
@@ -89,7 +90,16 @@ const Home = () => {
             </Link>
           </div>
           <div className="hero-video-section">
-            <img src={Logo} alt="" className="video-test" />
+            <video
+              src={Demo}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="hero-video"
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
         </main>
 
