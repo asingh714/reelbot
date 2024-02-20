@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../../utils/AuthContext";
-import Logo from "@assets/logo.svg";
+import Logo from "../../assets/logo.svg";
 import "./NavBar.scss";
 
 const NavBar = () => {

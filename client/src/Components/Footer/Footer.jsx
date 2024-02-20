@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Heart from "@assets/heart.svg";
+import Heart from "../../assets/heart.svg";
 
 import "./Footer.scss";
 

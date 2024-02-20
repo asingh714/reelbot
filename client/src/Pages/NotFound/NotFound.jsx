@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import "./NotFound.scss";
-import Logo from "@assets/logo.svg";
-import NavBar from "@components/NavBar/NavBar";
+import Logo from "../../assets/logo.svg";
+import NavBar from "../../Components/NavBar/NavBar";
 
 const NotFound = () => {
   return (

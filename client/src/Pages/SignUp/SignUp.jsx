@@ -1,4 +1,4 @@
-import SignUpForm from "@components/SignUpForm/SignUpForm";
+import SignUpForm from "../../Components/SignUpForm/SignUpForm";
 import "./SignUp.scss";
 
 const SignUp = () => {

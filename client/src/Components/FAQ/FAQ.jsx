@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
 
 import "./FAQ.scss";
-import Chevron from "@assets/chevron.svg";
+import Chevron from "../../assets/chevron.svg";
 
 const faqs = [
   {

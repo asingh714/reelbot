@@ -1,7 +1,7 @@
 import { useAuth } from "../../utils/AuthContext";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Alert from "@assets/alert-circle.svg";
+import Alert from "../../assets/alert-circle.svg";
 
 import "./LoginForm.scss";
 

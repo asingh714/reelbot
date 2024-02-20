@@ -3,15 +3,15 @@ import { useState } from "react";
 import validator from "validator";
 
 import "./Home.scss";
-import badgeCheck from "@assets/badge-check.svg";
-import Zap from "@assets/zap.svg";
-import Infinite from "@assets/infinity.svg";
-import EyeOff from "@assets/eye-off.svg";
-import Logo from "@assets/logo.svg";
-import Demo from "@assets/ReelBot.mp4";
-import NavBar from "@components/NavBar/NavBar";
-import FAQSection from "@components/FAQ/FAQ";
-import Footer from "@components/Footer/Footer";
+import badgeCheck from "../../assets/badge-check.svg";
+import Zap from "../../assets/zap.svg";
+import Infinite from "../../assets/infinity.svg";
+import EyeOff from "../../assets/eye-off.svg";
+import Logo from "../../assets/logo.svg";
+import Demo from "../../assets/ReelBot.mp4";
+import NavBar from "../../Components/NavBar/NavBar";
+import FAQSection from "../../Components/FAQ/FAQ";
+import Footer from "../../Components/Footer/Footer";
 import { useAuth } from "../../utils/AuthContext";
 import { Link } from "react-router-dom";
 
