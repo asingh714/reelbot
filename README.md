@@ -91,3 +91,9 @@ ReelBot goes beyond single interactions by storing the conversation history of e
 3. Start the server: ```npm run server```
 4. Run the client application: ```npm run dev```
 5. You will need to provide your own keys 
+
+
+## Acknowledgments
+Special thanks to The Movie Database (TMDb) for their indispensable movie data, which powers ReelBot's recommendations. 
+
+![API](https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d537fb228cf3ded904ef09b136fe3fec72548ebc1fea3fbbd1ad9e36364db38b.svg)
