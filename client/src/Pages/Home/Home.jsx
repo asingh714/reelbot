@@ -66,7 +66,7 @@ const Home = () => {
               alt="ReelBot Logo"
               className="hero-logo"
             />
-            <h1 className="main-heading">Your Personal Movie Advisor</h1>
+            <h1 className="main-heading">Your Personal AI Movie Advisor</h1>
             <p className="sub-heading">
               Find your perfect movie with ReelBot. Personalized picks, endless
               enjoyment.
