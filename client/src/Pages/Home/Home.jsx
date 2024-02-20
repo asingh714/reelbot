@@ -8,7 +8,7 @@ import Zap from "../../assets/zap.svg";
 import Infinite from "../../assets/infinity.svg";
 import EyeOff from "../../assets/eye-off.svg";
 import Logo from "../../assets/logo.svg";
-import Demo from "../../assets/Reelbot.mp4";
+import Demo from "../../assets/ReelBot.mp4";
 import NavBar from "../../Components/NavBar/NavBar";
 import FAQSection from "../../Components/FAQ/FAQ";
 import Footer from "../../Components/Footer/Footer";

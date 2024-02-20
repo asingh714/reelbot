@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     const response = await axios.post(
-      "http://localhost:3001/login",
+      "https://reelbot-server.onrender.com/login",
       {
         username,
         password,
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, password, email) => {
     const response = await axios.post(
-      "http://localhost:3001/register",
+      "https://reelbot-server.onrender.com/register",
       {
         username,
         email,

@@ -85,7 +85,7 @@ const ChatBox = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3001/movieRec",
+        "https://reelbot-server.onrender.com/movieRec",
 
         {
           input: query || suggestion,
