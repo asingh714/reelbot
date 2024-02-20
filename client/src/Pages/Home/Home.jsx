@@ -9,9 +9,9 @@ import Infinite from "../../assets/infinity.svg";
 import EyeOff from "../../assets/eye-off.svg";
 import Logo from "../../assets/logo.svg";
 import Demo from "../../assets/ReelBot.mp4";
-import NavBar from "../../Components/NavBar/NavBar.jsx";
-import FAQSection from "../../Components/FAQ/FAQ.jsx";
-import Footer from "../../Components/Footer/Footer.jsx";
+import NavBar from "../../Components/NavBar/NavBar";
+import FAQSection from "../../Components/FAQ/FAQ";
+import Footer from "../../Components/Footer/Footer";
 import { useAuth } from "../../utils/AuthContext";
 import { Link } from "react-router-dom";
 

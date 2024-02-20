@@ -1,5 +1,4 @@
-import ChatBox from "../../Components/ChatBox/ChatBox.jsx";
-
+import ChatBox from "../../Components/ChatBox/ChatBox";
 import "./Chat.scss";
 
 const Chat = () => {
