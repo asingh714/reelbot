@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import "./NotFound.scss";
 import Logo from "../../assets/logo.svg";
-import NavBar from "../../Components/NavBar/NavBar";
+import NavBar from "src/Components/NavBar/NavBar";
 
 const NotFound = () => {
   return (

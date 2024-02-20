@@ -1,4 +1,4 @@
-import ChatBox from "../../Components/ChatBox/ChatBox";
+import ChatBox from "src/Components/ChatBox/ChatBox";
 import "./Chat.scss";
 
 const Chat = () => {

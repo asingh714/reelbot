@@ -1,4 +1,4 @@
-import LoginForm from "../../Components/LoginForm/LoginForm";
+import LoginForm from "src/Components/LoginForm/LoginForm";
 import "./Login.scss";
 
 const Login = () => {
