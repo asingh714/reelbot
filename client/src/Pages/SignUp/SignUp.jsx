@@ -1,4 +1,4 @@
-// import SignUpForm from "../../Components/SignUpForm/SignUpForm";
+import SignUpForm from "../../Components/SignUpForm/SignUpForm";
 import "./SignUp.scss";
 
 const SignUp = () => {
@@ -8,7 +8,7 @@ const SignUp = () => {
       <span className="signup-subheader">
         ReelBot is your trusted movie guide
       </span>
-      {/* <SignUpForm /> */}
+      <SignUpForm />
     </div>
   );
 };
