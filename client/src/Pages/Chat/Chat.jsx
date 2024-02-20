@@ -1,4 +1,4 @@
-import ChatBox from "../../Components/ChatBox/ChatBox";
+import ChatBox from "../../Components/ChatBox/ChatBox.jsx";
 
 import "./Chat.scss";
 
