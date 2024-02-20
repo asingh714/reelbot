@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "server": "nodemon app.js",
+    "start": "node app.js",
     "build": "npm i"
   },
   "repository": {
@@ -19,6 +20,9 @@
     "url": "https://github.com/asingh714/reelbot/issues"
   },
   "homepage": "https://github.com/asingh714/reelbot#readme",
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.3",
     "axios": "^1.6.7",
@@ -32,8 +36,5 @@
     "morgan": "^1.10.0",
     "openai": "^4.26.0",
     "validator": "^13.11.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.3"
   }
 }
