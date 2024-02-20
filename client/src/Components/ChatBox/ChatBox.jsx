@@ -3,8 +3,8 @@ import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
-import NewChat from "../../assets/new-chat.svg";
-import Send from "../../assets/send.svg";
+import NewChat from "@assets/new-chat.svg";
+import Send from "@assets/send.svg";
 import "./ChatBox.scss";
 import MovieMessage from "../MovieMessage/MovieMessage";
 import TextMessage from "../TextMessage/TextMessage";
