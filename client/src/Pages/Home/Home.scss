@@ -16,22 +16,47 @@
     background-color: white;
     padding: 5rem 10rem;
     border-radius: 5rem;
+    max-width: 100%;
+
+    @include md {
+      padding: 2.5rem;
+    }
 
     .hero-section {
       display: flex;
 
+      @include md {
+        flex-direction: column;
+        gap: 10rem;
+        // padding: 5rem 2rem;
+      }
+
       .hero-main-section {
         width: 50%;
+        @include md {
+          width: 100%;
+        }
 
         .hero-logo {
           width: 10rem;
           height: 10rem;
+
+          @include md {
+            width: 7.5rem;
+            height: 7.5rem;
+            margin: auto;
+          }
         }
 
         .main-heading {
           font-size: 4rem;
           font-weight: 700;
           margin-bottom: 2rem;
+
+          @include md {
+            font-size: 3.2rem;
+            text-align: center;
+          }
         }
 
         .sub-heading {
@@ -39,6 +64,11 @@
           font-weight: 600;
           margin-bottom: 2rem;
           color: $gray-500;
+
+          @include md {
+            font-size: 1.8rem;
+            text-align: center;
+          }
         }
 
         .list-items {
@@ -69,6 +99,12 @@
             #aa00ff 67%,
             #cc4499 100%
           );
+
+          @include md {
+            display: block;
+            width: 100%;
+            text-align: center;
+          }
         }
       }
 
@@ -78,6 +114,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
+        @include md {
+          width: 100%;
+        }
 
         .hero-video {
           // background: radial-gradient(circle, $gray-50, #7002fe);
@@ -93,10 +133,18 @@
     padding: 15rem 0;
     gap: 7.5rem;
 
+    @include md {
+      padding: 5rem 0;
+      flex-direction: column;
+    }
+
     .feature {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      @include md {
+        align-items: center;
+      }
       .feature-icon {
         background-color: #673dff1a;
         padding: 1rem;
@@ -129,6 +177,10 @@
       font-weight: 700;
       text-align: center;
       margin-bottom: 3rem;
+
+      @include md {
+        font-size: 2.8rem;
+      }
     }
 
     .cta-description {
@@ -139,6 +191,9 @@
       text-align: center;
       max-width: 60rem;
       margin-bottom: 3rem;
+      @include md {
+        font-size: 1.6rem;
+      }
     }
 
     .messages {
@@ -176,6 +231,10 @@
       gap: 1rem;
       width: 100%;
       justify-content: center;
+
+      @include md {
+        flex-direction: column;
+      }
       .cta-input {
         padding: 1.5rem 2rem;
         background: white;
@@ -185,6 +244,10 @@
         font-size: 1.6rem;
         font-weight: 600;
         color: $gray-900;
+
+        @include md {
+          max-width: 100%;
+        }
       }
 
       .cta-button {
@@ -196,12 +259,17 @@
         font-weight: 600;
         cursor: pointer;
         background-color: #663dff;
+        max-width: 50rem;
         background-image: linear-gradient(
           319deg,
           #7002fe 0%,
           #aa00ff 67%,
           #cc4499 100%
         );
+
+        @include md {
+          width: 100%;
+        }
       }
     }
   }

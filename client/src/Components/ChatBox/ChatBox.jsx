@@ -235,6 +235,7 @@ const ChatBox = () => {
             onKeyDown={handleKeyDown}
             placeholder="Write a message..."
             className="input-field"
+            disabled={isLoading}
           />
           <button type="submit" className="send-button">
             <img src={Send} alt="Send" className="send-icon" />
