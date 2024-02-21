@@ -11,29 +11,29 @@ import { createClient } from "@supabase/supabase-js";
 const app = express();
 
 // CORS configuration for Development
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+// app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 // CORS configuration to enable cross-origin requests from specified origins
-// app.use(
-//   cors((req, callback) => {
-//     const allowedOrigins = [
-//       "https://reelbot-client.onrender.com",
-//       "https://reelbot-client.onrender.com/",
-//       "https://www.reelbot.co",
-//       "https://www.reelbot.co/",
-//       "https://reelbot.co",
-//       "https://reelbot.co/",
-//     ];
-//     const origin = req.header("Origin");
-//     let corsOptions;
-//     if (allowedOrigins.includes(origin)) {
-//       corsOptions = { origin: true, credentials: true };
-//     } else {
-//       corsOptions = { origin: false };
-//     }
-//     callback(null, corsOptions);
-//   })
-// );
+app.use(
+  cors((req, callback) => {
+    const allowedOrigins = [
+      "https://reelbot-client.onrender.com",
+      "https://reelbot-client.onrender.com/",
+      "https://www.reelbot.co",
+      "https://www.reelbot.co/",
+      "https://reelbot.co",
+      "https://reelbot.co/",
+    ];
+    const origin = req.header("Origin");
+    let corsOptions;
+    if (allowedOrigins.includes(origin)) {
+      corsOptions = { origin: true, credentials: true };
+    } else {
+      corsOptions = { origin: false };
+    }
+    callback(null, corsOptions);
+  })
+);
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
