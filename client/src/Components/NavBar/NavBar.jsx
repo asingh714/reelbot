@@ -17,7 +17,7 @@ const NavBar = () => {
         <div className="nav-links">
           <Link to="/chat">Chat</Link>
           <span onClick={() => logout()}>Logout</span>
-          <Link to="https://github.com/" target="_blank">
+          <Link to="https://github.com/asingh714/reelbot" target="_blank">
             GitHub
           </Link>
         </div>
