@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import moment from "moment";
-import YouTube from "../../assets/YouTube.svg";
+import YouTube from "../../assets/youtube.svg";
 
 import "./MovieMessage.scss";
 
