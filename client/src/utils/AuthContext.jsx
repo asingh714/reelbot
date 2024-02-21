@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+
+import newRequest from "../utils/newRequest";
 
 const AuthContext = createContext(null);
 
@@ -17,39 +18,32 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    const response = await axios.post(
-      "https://reelbot-server.onrender.com/login",
-      {
-        username,
-        password,
-      },
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await newRequest.post("/login", {
+      username,
+      password,
+    });
     setReelBotUser(response.data.user);
     localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
   const register = async (username, password, email) => {
-    const response = await axios.post(
-      "https://reelbot-server.onrender.com/register",
-      {
-        username,
-        email,
-        password,
-      },
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await newRequest.post("/register", {
+      username,
+      email,
+      password,
+    });
     setReelBotUser(response.data.user);
     localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
-  const logout = () => {
-    localStorage.removeItem("reelBotUser");
-    setReelBotUser(null);
+  const logout = async () => {
+    try {
+      await newRequest.post("/logout");
+      localStorage.removeItem("reelBotUser");
+      setReelBotUser(null);
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
   const value = {

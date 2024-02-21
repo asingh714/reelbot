@@ -3,6 +3,7 @@ import axios from "axios";
 
 import SuggestionOptions from "../SuggestionOptions/SuggestionOptions";
 import { useChatScroll } from "../../utils/useChatScroll";
+import newRequest from "../../utils/newRequest";
 import NewChat from "../../assets/new-chat.svg";
 import Send from "../../assets/send.svg";
 import "./ChatBox.scss";
@@ -84,17 +85,15 @@ const ChatBox = () => {
   const fetchMovieRecommendation = async (suggestion) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "https://reelbot-server.onrender.com/movieRec",
+      const response = await newRequest.post(
+        "/movieRec",
 
         {
           input: query || suggestion,
           conversationId,
-        },
-        {
-          withCredentials: true,
         }
       );
+      console.log("response", response);
       setIsLoading(false);
 
       if (
