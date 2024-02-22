@@ -7,6 +7,16 @@ import axios from "axios";
 import OpenAI from "openai";
 import cookieParser from "cookie-parser";
 import { createClient } from "@supabase/supabase-js";
+import { movieGenre } from "./utils/movieGenre.js";
+import { createEmbedding } from "./utils/createEmbeddings.js";
+import { findNearestMovie } from "./utils/findNearestMovie.js";
+import { login, register, logout } from "./auth.js";
+import { authenticate } from "./utils/authenticate.js";
+import {
+  startNewConversation,
+  storeMessage,
+  getConversationHistory,
+} from "./utils/createMessages.js";
 
 const app = express();
 
@@ -34,20 +44,10 @@ app.use(
     callback(null, corsOptions);
   })
 );
+
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
-
-import { movieGenre } from "./utils/movieGenre.js";
-import { createEmbedding } from "./utils/createEmbeddings.js";
-import { findNearestMovie } from "./utils/findNearestMovie.js";
-import { login, register, logout } from "./auth.js";
-import { authenticate } from "./utils/authenticate.js";
-// import {
-//   startNewConversation,
-//   storeMessage,
-//   getConversationHistory,
-// } from "./utils/createMessages.js";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -65,9 +65,9 @@ app.post("/logout", logout);
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
-    let page = 211;
+    let page = 231;
     let movies = [];
-    let totalPages = 230;
+    let totalPages = 250;
 
     while (page <= totalPages) {
       const response = await axios.get(
@@ -128,55 +128,6 @@ app.post("/postMovies", async (req, res) => {
     res.status(500).send("Error while fetching movie data");
   }
 });
-
-async function startNewConversation() {
-  const insertResponse = await supabase.from("conversations").insert([{}]);
-
-  if (insertResponse.error) {
-    console.error("Insert error:", insertResponse.error);
-    throw new Error("Failed to start a new conversation");
-  }
-
-  const { data, error } = await supabase
-    .from("conversations")
-    .select("id")
-    .order("created_at", { ascending: false })
-    .limit(1);
-
-  if (error) {
-    console.error("Retrieval error:", error);
-    throw new Error("Failed to retrieve new conversation ID");
-  }
-
-  if (data && data.length > 0) {
-    return data[0].id;
-  } else {
-    throw new Error("No conversation ID found after insertion");
-  }
-}
-
-async function storeMessage(conversationId, role, content) {
-  const { data, error } = await supabase
-    .from("conversation_history")
-    .insert([{ conversation_id: conversationId, role, content }]);
-
-  if (error) {
-    console.error("Store message error:", error.message);
-    throw new Error(`Failed to store message: ${error.message}`);
-  }
-  return data;
-}
-
-async function getConversationHistory(conversationId) {
-  const { data, error } = await supabase
-    .from("conversation_history")
-    .select("role, content")
-    .eq("conversation_id", conversationId)
-    .order("created_at", { ascending: true });
-
-  if (error) throw new Error("Failed to retrieve conversation history");
-  return data;
-}
 
 app.post("/movieRec", authenticate, async (req, res) => {
   const { input, conversationId: existingConversationId } = req.body;
