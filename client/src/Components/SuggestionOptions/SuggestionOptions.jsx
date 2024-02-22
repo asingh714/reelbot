@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 
 import "./SuggestionOptions.scss";
 
+// A predefined list of movie suggestion prompts
 const allSuggestions = [
   "Give me a recommendation for a movie to watch with an astrophysicist",
   "What's a good movie for a rainy day?",
@@ -25,6 +26,7 @@ const allSuggestions = [
   "What's a movie that's known for its plot twists?",
 ];
 
+// Generates a specified number of random, unique suggestions from a list.
 function getRandomSuggestions(suggestions, numItems) {
   let result = new Set();
   while (result.size < numItems) {
@@ -34,8 +36,10 @@ function getRandomSuggestions(suggestions, numItems) {
   return Array.from(result);
 }
 
+// Generate a random set of 4 suggestions to display to the user
 const suggestions = getRandomSuggestions(allSuggestions, 4);
 
+// SuggestionOptions Component displays a set of random movie suggestion buttons to the user.
 const SuggestionOptions = ({ onSelectSuggestion }) => {
   return (
     <div className="suggestions-container">

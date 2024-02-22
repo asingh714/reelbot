@@ -4,6 +4,10 @@ import PropTypes from "prop-types";
 import { useAuth } from "../../utils/AuthContext";
 import "./TextMessage.scss";
 
+/* 
+TextMessage Component renders individual text messages within the chat interface, 
+distinguishing between messages sent by the app (ReelBot) and the user.
+*/
 const TextMessage = ({ message }) => {
   const { reelBotUser } = useAuth();
   return (

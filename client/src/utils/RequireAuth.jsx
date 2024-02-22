@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
+// Custom hook to require authentication before rendering a component
 const RequireAuth = () => {
   const { reelBotUser } = useAuth();
   const [isLoading, setIsLoading] = useState(true);

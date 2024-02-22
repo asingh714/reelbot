@@ -17,6 +17,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Login method to authenticate a user.
   const login = async (username, password) => {
     const response = await newRequest.post("/login", {
       username,
@@ -26,6 +27,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
+  // Register method to create a new user.
   const register = async (username, password, email) => {
     const response = await newRequest.post("/register", {
       username,
@@ -36,6 +38,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
 
+  // Logout method to remove user from local storage and state.
   const logout = async () => {
     try {
       await newRequest.post("/logout");

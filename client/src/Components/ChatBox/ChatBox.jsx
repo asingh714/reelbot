@@ -10,10 +10,13 @@ import "./ChatBox.scss";
 import MovieMessage from "../MovieMessage/MovieMessage";
 import TextMessage from "../TextMessage/TextMessage";
 
+// Main ChatBox component where users interact with ReelBot
 const ChatBox = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState(null);
+
+  const [conversationId, setConversationId] = useState(null); // ID to track the current conversation for memory
+  // Initial message from ReelBot
   const [messages, setMessages] = useState([
     {
       type: "message",
@@ -22,14 +25,16 @@ const ChatBox = () => {
       timestamp: Date.now(),
     },
   ]);
-  const messagesEndRef = useChatScroll(messages);
+  const messagesEndRef = useChatScroll(messages); // Custom hook to keep chat scrolled to the latest message
 
+  // Effect hook to store the conversationId in local storage when it changes
   useEffect(() => {
     if (conversationId) {
       localStorage.setItem("conversationId", conversationId);
     }
   }, [conversationId]);
 
+  // Effect hook to retrieve the conversationId from local storage when the component mounts
   useEffect(() => {
     const storedConversationId = localStorage.getItem("conversationId");
     if (storedConversationId) {
@@ -37,6 +42,7 @@ const ChatBox = () => {
     }
   }, []);
 
+  // Effect hook to clear conversationId from local storage when starting a new conversation
   useEffect(() => {
     if (
       messages.length === 1 &&
@@ -47,6 +53,7 @@ const ChatBox = () => {
     }
   }, [messages]);
 
+  // Function to start a new conversation by resetting relevant state
   const startNewConversation = () => {
     localStorage.removeItem("conversationId");
     setConversationId(null);
@@ -61,6 +68,7 @@ const ChatBox = () => {
     setQuery("");
   };
 
+  // Fetch movie details from the TMDB API by movie ID
   const fetchMovie = async (id) => {
     try {
       const key = import.meta.env.VITE_TMDB_API_KEY;
@@ -74,6 +82,7 @@ const ChatBox = () => {
     }
   };
 
+  // Fetch movie trailer details from the TMDB API by movie ID
   const fetchTrailer = async (id) => {
     const key = import.meta.env.VITE_TMDB_API_KEY;
     const { data } = await axios.get(
@@ -82,6 +91,7 @@ const ChatBox = () => {
     return data;
   };
 
+  // Fetch a movie recommendation based on the user's query or suggestion
   const fetchMovieRecommendation = async (suggestion) => {
     setIsLoading(true);
     try {
@@ -109,6 +119,7 @@ const ChatBox = () => {
     }
   };
 
+  // Handle the Enter key to submit the query without a newline
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -116,6 +127,7 @@ const ChatBox = () => {
     }
   };
 
+  // Function to submit the user's query and process the response
   const submitResponse = async (event) => {
     if (event) event.preventDefault();
     setMessages((prevMessages) => [
@@ -128,9 +140,10 @@ const ChatBox = () => {
       },
     ]);
 
-    const response = await fetchMovieRecommendation();
+    const response = await fetchMovieRecommendation(); // Fetch recommendation based on query
 
-    setQuery("");
+    setQuery(""); // Reset the query input field
+    // Append ReelBot's response to the chat
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -144,6 +157,7 @@ const ChatBox = () => {
     await updateMessagesWithMovie(response.id);
   };
 
+  // Similar to submitResponse but triggered by selecting a suggestion
   const submitResponseWithSuggestion = async (suggestion) => {
     setMessages((prevMessages) => [
       ...prevMessages,
@@ -170,6 +184,7 @@ const ChatBox = () => {
     await updateMessagesWithMovie(response.id);
   };
 
+  // Update chat messages with detailed movie information
   const updateMessagesWithMovie = async (id) => {
     const movieData = await fetchMovie(id);
     const videoData = await fetchTrailer(id);
@@ -196,6 +211,8 @@ const ChatBox = () => {
     ]);
     return;
   };
+
+  // Handle selection of a movie suggestion
   const handleSelectSuggestion = (suggestion) => {
     submitResponseWithSuggestion(suggestion);
   };

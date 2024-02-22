@@ -4,6 +4,11 @@ import YouTube from "../../assets/youtube.svg";
 
 import "./MovieMessage.scss";
 
+/*
+MovieMessage Component renders a message containing movie information 
+including a clickable trailer links
+props.message - Object containing movie details
+*/
 const MovieMessage = ({ message }) => {
   return (
     <div key={message.timestamp} className="movie-message">
