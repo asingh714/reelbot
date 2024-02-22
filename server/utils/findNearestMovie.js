@@ -6,6 +6,8 @@ const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_API_KEY
 );
+
+// Utility functions for finding the nearest movie to a given embedding
 export async function findNearestMovie(embedding) {
   const { data } = await supabase.rpc("match_movies", {
     query_embedding: embedding,

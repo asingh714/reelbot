@@ -10,6 +10,7 @@ const supabase = createClient(
   process.env.SUPABASE_API_KEY
 );
 
+// Authentication logic for registering users
 export const register = async (req, res) => {
   const { email, username, password } = req.body;
 
@@ -67,6 +68,7 @@ export const register = async (req, res) => {
   }
 };
 
+// Authentication logic for loggin in users
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -109,6 +111,7 @@ export const login = async (req, res) => {
   }
 };
 
+// Authentication logic for loggin out users
 export const logout = async (req, res) => {
   res.cookie("token", "logout", {
     httpOnly: true,

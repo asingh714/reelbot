@@ -1,5 +1,6 @@
 import { isTokenValid } from "./jwt.js";
 
+/// Middleware for authenticating users and attaching conversation IDs
 export const authenticate = async (req, res, next) => {
   const { token } = req.signedCookies;
 
@@ -10,7 +11,6 @@ export const authenticate = async (req, res, next) => {
     const { id, username, email, conversationId } = await isTokenValid({
       token,
     });
-    // req.user = { id, username, email };
     req.user = { id, username, email };
     req.conversationId = conversationId; // Attach conversationId to the request
     next();

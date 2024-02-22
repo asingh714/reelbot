@@ -62,6 +62,7 @@ app.post("/register", register);
 app.post("/login", login);
 app.post("/logout", logout);
 
+// Endpoint to populate the database with movies from an external API
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
@@ -129,6 +130,7 @@ app.post("/postMovies", async (req, res) => {
   }
 });
 
+// Endpoint for getting movie recommendations based on user input
 app.post("/movieRec", authenticate, async (req, res) => {
   const { input, conversationId: existingConversationId } = req.body;
 

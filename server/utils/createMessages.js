@@ -7,6 +7,7 @@ const supabase = createClient(
   process.env.SUPABASE_API_KEY
 );
 
+// Utility functions for starting new conversations, storing messages, and retrieving conversation history
 export async function startNewConversation() {
   const insertResponse = await supabase.from("conversations").insert([{}]);
 
