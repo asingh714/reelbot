@@ -24,16 +24,10 @@ const app = express();
 // app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 // CORS configuration to enable cross-origin requests from specified origins
+const allowedOrigins = ["https://www.reelbot.co", "https://reelbot.co"];
+
 app.use(
   cors((req, callback) => {
-    const allowedOrigins = [
-      "https://reelbot-client.onrender.com",
-      "https://reelbot-client.onrender.com/",
-      "https://www.reelbot.co",
-      "https://www.reelbot.co/",
-      "https://reelbot.co",
-      "https://reelbot.co/",
-    ];
     const origin = req.header("Origin");
     let corsOptions;
     if (allowedOrigins.includes(origin)) {
@@ -66,9 +60,9 @@ app.post("/logout", logout);
 app.post("/postMovies", async (req, res) => {
   try {
     // NEED TO DO.
-    let page = 231;
+    let page = 251;
     let movies = [];
-    let totalPages = 250;
+    let totalPages = 270;
 
     while (page <= totalPages) {
       const response = await axios.get(
