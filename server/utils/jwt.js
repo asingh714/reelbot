@@ -20,7 +20,7 @@ export const attachCookiesToResponse = ({ res, user }) => {
     expires: new Date(Date.now() + thirtyDays),
     secure: process.env.NODE_ENV,
     signed: true,
-    // sameSite: "None", // **Testing only**
+    sameSite: "None",
   });
 };
 

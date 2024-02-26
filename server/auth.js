@@ -99,7 +99,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    const tokenUser = createTokenUser(users);
+    const tokenUser = createTokenUser(users); 
     attachCookiesToResponse({ res, user: tokenUser });
 
     res
