@@ -37,9 +37,9 @@ export const register = async (req, res) => {
       .select("email")
       .eq("email", email);
 
-    // if (error) {
-    //   throw error;
-    // }
+    if (error) {
+      throw error;
+    }
 
     if (data.length > 0) {
       return res.status(400).json({ msg: "Email already exists" });
@@ -61,14 +61,14 @@ export const register = async (req, res) => {
     attachCookiesToResponse({ res, user });
     res
       .status(201)
-      .json({ username: userData[0].username, email: userData[0].email });
+      .json({ username: userData[0].username, email: userData[0].email, user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: error.message });
   }
 };
 
-// Authentication logic for loggin in users
+// Authentication logic for logging in users
 export const login = async (req, res) => {
   const { username, password } = req.body;
 
@@ -99,7 +99,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    const tokenUser = createTokenUser(users); 
+    const tokenUser = createTokenUser(users);
     attachCookiesToResponse({ res, user: tokenUser });
 
     res

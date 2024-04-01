@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
       username,
       password,
     });
+
     setReelBotUser(response.data.user);
     localStorage.setItem("reelBotUser", JSON.stringify(response.data.user));
   };
