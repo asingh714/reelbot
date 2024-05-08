@@ -21,23 +21,23 @@ import {
 const app = express();
 
 // CORS configuration for Development
-// app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 
 // CORS configuration to enable cross-origin requests from specified origins
 const allowedOrigins = ["https://www.reelbot.co", "https://reelbot.co"];
 
-app.use(
-  cors((req, callback) => {
-    const origin = req.header("Origin");
-    let corsOptions;
-    if (allowedOrigins.includes(origin)) {
-      corsOptions = { origin: true, credentials: true };
-    } else {
-      corsOptions = { origin: false };
-    }
-    callback(null, corsOptions);
-  })
-);
+// app.use(
+//   cors((req, callback) => {
+//     const origin = req.header("Origin");
+//     let corsOptions;
+//     if (allowedOrigins.includes(origin)) {
+//       corsOptions = { origin: true, credentials: true };
+//     } else {
+//       corsOptions = { origin: false };
+//     }
+//     callback(null, corsOptions);
+//   })
+// );
 
 app.use(morgan("tiny"));
 app.use(express.json());
