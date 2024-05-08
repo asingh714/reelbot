@@ -33,7 +33,7 @@ const NavBar = () => {
       </Link>
       <div className="nav-links">
         <Link to="/login">Login</Link>
-        <Link to="https://github.com/" target="_blank">
+        <Link to="https://github.com/asingh714/reelbot" target="_blank">
           GitHub
         </Link>
       </div>
