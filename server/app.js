@@ -150,10 +150,16 @@ app.post("/movieRec", authenticate, async (req, res) => {
 
     const conversationHistory = await getConversationHistory(conversationId);
 
+    const messages = conversationHistory.map(({ role, content }) => ({
+      role,
+      content,
+    }));
+
     const { choices } = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: conversationHistory,
-      temperature: 0.5,
+      // messages: conversationHistory,
+      messages,
+      temperature: 0.9,
       frequency_penalty: 0.5,
     });
 
