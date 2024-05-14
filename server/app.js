@@ -103,7 +103,7 @@ app.post("/postMovies", async (req, res) => {
     });
 
     const embedding = await openai.embeddings.create({
-      model: "text-embedding-ada-002",
+      model: "text-embedding-3-large",
       input: info,
     });
 
@@ -151,7 +151,7 @@ app.post("/movieRec", authenticate, async (req, res) => {
     const conversationHistory = await getConversationHistory(conversationId);
 
     const { choices } = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o",
       messages: conversationHistory,
       temperature: 0.5,
       frequency_penalty: 0.5,
