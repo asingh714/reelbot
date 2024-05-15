@@ -128,47 +128,79 @@ app.post("/postMovies", async (req, res) => {
 app.post("/movieRec", authenticate, async (req, res) => {
   const { input, conversationId: existingConversationId } = req.body;
 
-  let conversationId;
+  let convoId;
 
   try {
-    const embedding = await createEmbedding(input);
-    const { match, id } = await findNearestMovie(embedding);
-
     if (existingConversationId) {
-      conversationId = existingConversationId;
+      convoId = existingConversationId;
+
+      const userQuestion = `Question: ${input}.`;
+      await storeMessage(convoId, "user", userQuestion);
+
+      const conversationHistory = await getConversationHistory(convoId);
+
+      const convo = conversationHistory
+        .map(({ role, content }) => `${role}:${content}`)
+        .join("\n");
+
+      const extendedConvo = `Conversation History:\n\n${convo}\n\n VERY IMPORTANT: Above is the chat history, make a single movie recommendation based on the chat history and last input of the user. Make sure you look at ALL of the chat history and the last input of the user to make a recommendation. Do not make previous recommendations again. Ensure that the new recommendation is unique and has not been suggested before. If no new recommendations can be made, inform the user accordingly.`;
+      const embedding = await createEmbedding(extendedConvo);
+      const { match, id } = await findNearestMovie(embedding);
+
+      const context = `Context: ${match}`;
+      await storeMessage(convoId, "system", context);
+
+      const latestMessages = await getConversationHistory(convoId);
+
+      console.log("latestMessages", latestMessages);
+
+      const { choices } = await openai.chat.completions.create({
+        model: "gpt-4o",
+        // messages,
+        messages: latestMessages,
+        temperature: 0.9,
+        frequency_penalty: 0.5,
+      });
+
+      await storeMessage(convoId, "assistant", choices[0].message.content);
+
+      res.status(200).json({ answer: choices[0].message.content, id, convoId });
     } else {
-      conversationId = await startNewConversation();
-      const initialSystemMessage = `You are an enthusiastic movie expert who loves recommending movies to people. You will be given two pieces of information - a question from the user and some context from the system.  Your main objective is to formulate an informative, in-depth answer to the question using the provided context from the system. Make sure you review the conversation history if possible. If the question is unclear or the user input is unrelated to movies, say, "Sorry, I don't know the answer." This is very important: only answer with the context provided. And never share the Movie ID in your answer.`;
-      await storeMessage(conversationId, "system", initialSystemMessage);
+      convoId = await startNewConversation();
+      const initialSystemMessage = `You are an enthusiastic movie expert who loves recommending movies to people.
+You will be given two pieces of information - a question from the user and some context from the system.  
+Your main objective is to formulate an informative, in-depth answer to the question using the provided context from the system. 
+This is very important: only answer with the context provided. 
+And never share the Movie ID in your answer.`;
+      await storeMessage(convoId, "system", initialSystemMessage);
+
+      const embedding = await createEmbedding(input);
+      const { match, id } = await findNearestMovie(embedding);
+
+      const userQuestion = `Question: ${input}.`;
+      await storeMessage(convoId, "user", userQuestion);
+
+      const context = `Context: ${match}`;
+      await storeMessage(convoId, "system", context);
+
+      const conversationHistory = await getConversationHistory(convoId);
+
+      const messages = conversationHistory.map(({ role, content }) => ({
+        role,
+        content,
+      }));
+
+      const { choices } = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages,
+        temperature: 0.9,
+        frequency_penalty: 0.5,
+      });
+
+      res.status(200).json({ answer: choices[0].message.content, id, convoId });
     }
-
-    const userQuestion = `Question: ${input}.`;
-    await storeMessage(conversationId, "user", userQuestion);
-
-    const context = `Context: ${match}`;
-    await storeMessage(conversationId, "system", context);
-
-    const conversationHistory = await getConversationHistory(conversationId);
-
-    const messages = conversationHistory.map(({ role, content }) => ({
-      role,
-      content,
-    }));
-
-    const { choices } = await openai.chat.completions.create({
-      model: "gpt-4o",
-      // messages: conversationHistory,
-      messages,
-      temperature: 0.9,
-      frequency_penalty: 0.5,
-    });
-
-    await storeMessage(conversationId, "assistant", choices[0].message.content);
-
-    res
-      .status(200)
-      .json({ answer: choices[0].message.content, id, conversationId });
   } catch (error) {
+    console.error("Error with search:", error);
     res.status(500).send("Error with search");
   }
 });

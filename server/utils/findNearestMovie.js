@@ -7,15 +7,38 @@ const supabase = createClient(
   process.env.SUPABASE_API_KEY
 );
 
-// Utility functions for finding the nearest movie to a given embedding
+const previouslyReturnedIds = new Set();
+
 export async function findNearestMovie(embedding) {
-  const { data } = await supabase.rpc("match_movies", {
-    query_embedding: embedding,
-    match_threshold: 0.5,
-    match_count: 1,
-  });
+  try {
+    const { data, error } = await supabase.rpc("match_movies", {
+      query_embedding: embedding,
+      match_threshold: 0.5,
+      match_count: 1,
+      excluded_ids: Array.from(previouslyReturnedIds),
+    });
 
-  console.log("data", data);
+    if (error) {
+      console.error("Error with RPC call:", error);
+      return { match: "Error fetching recommendations.", id: null };
+    }
 
-  return { match: data[0].content, id: data[0].movie_id };
+    if (!data || data.length === 0) {
+      return { match: "No new recommendations available.", id: null };
+    }
+
+    console.log("data", data);
+
+    for (const movie of data) {
+      if (!previouslyReturnedIds.has(movie.movie_id)) {
+        previouslyReturnedIds.add(movie.movie_id);
+        return { match: movie.content, id: movie.movie_id };
+      }
+    }
+
+    return { match: "No new recommendations available.", id: null };
+  } catch (err) {
+    console.error("Error with search:", err);
+    return { match: "Error fetching recommendations.", id: null };
+  }
 }

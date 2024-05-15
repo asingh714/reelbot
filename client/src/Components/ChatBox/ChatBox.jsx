@@ -14,8 +14,8 @@ import TextMessage from "../TextMessage/TextMessage";
 const ChatBox = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const [conversationId, setConversationId] = useState(null); // ID to track the current conversation for memory
+
   // Initial message from ReelBot
   const [messages, setMessages] = useState([
     {
@@ -25,6 +25,7 @@ const ChatBox = () => {
       timestamp: Date.now(),
     },
   ]);
+
   const messagesEndRef = useChatScroll(messages); // Custom hook to keep chat scrolled to the latest message
 
   // Effect hook to store the conversationId in local storage when it changes
@@ -106,11 +107,8 @@ const ChatBox = () => {
       console.log("response", response);
       setIsLoading(false);
 
-      if (
-        response.data.conversationId &&
-        response.data.conversationId !== conversationId
-      ) {
-        setConversationId(response.data.conversationId);
+      if (response.data.convoId && response.data.convoId !== conversationId) {
+        setConversationId(response.data.convoId);
       }
       return response.data;
     } catch (error) {
@@ -217,6 +215,7 @@ const ChatBox = () => {
     submitResponseWithSuggestion(suggestion);
   };
 
+  console.log("ChatBox conversationId", conversationId);
   return (
     <div className="chat-box-container">
       <img
